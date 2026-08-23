@@ -18,13 +18,14 @@ const ROOT = process.argv[2];
 const SITE = 'https://lcmnav3d.github.io';
 const OG_IMG = `${SITE}/og.jpg`;
 const OG_W = 1200, OG_H = 675;
-const BUILD_DATE = '2026-08-16';
+const BUILD_DATE = '2026-08-23';
 const AUTHOR = 'L. Charitha Madhushanka';
-const PUBLISHER = 'UEDEV Labs';
+const PUBLISHER = 'UEDEV';
 const PUBLISHER_URL = 'https://uedevlabs.github.io/';
 const FAB = 'https://www.fab.com/listings/92f05e42-d7be-4de3-abe8-7b0a3e70ba73';
 const DISCORD = 'https://discord.gg/nXkpD6uaBG';
 const YOUTUBE = 'https://www.youtube.com/watch?v=7_F3AvgQIQU';
+const PRODUCT_PAGE = 'https://uedevlabs.github.io/unreal-engine-3d-pathfinding/';
 
 // Paste the token from Search Console → Add property → HTML tag (the content="..."
 // value only) and re-run the build. Emitted on every page so verification survives
@@ -65,7 +66,7 @@ const WEBSITE = {
   '@type': 'WebSite',
   '@id': `${SITE}/#website`,
   url: `${SITE}/`,
-  name: 'LCM Nav3D Documentation',
+  name: 'LCM 3D Navigation AI Documentation',
   description: PAGES['index.html'].desc,
   inLanguage: 'en',
   publisher: { '@id': `${SITE}/#organization` },
@@ -73,14 +74,21 @@ const WEBSITE = {
 const SOFTWARE = {
   '@type': 'SoftwareApplication',
   '@id': `${SITE}/#software`,
-  name: 'LCM Nav3D',
-  alternateName: 'LCM Nav3D — True Volumetric 3D Navigation for Unreal Engine',
+  name: 'LCM 3D Navigation AI',
+  alternateName: [
+    'LCM Nav3D',
+    'LCM 3D Navigation',
+    'Nav3D',
+    'LCM 3D Navigation AI — Infinite 3D Pathfinding & Volumetric Navigation for UE5',
+  ],
   applicationCategory: 'DeveloperApplication',
   applicationSubCategory: 'Game Engine Plugin',
-  operatingSystem: 'Windows 64-bit, Linux',
+  operatingSystem: 'Windows, PlayStation 5, Xbox Series X|S',
   softwareRequirements: 'Unreal Engine 5.2 to 5.8',
   url: `${SITE}/`,
   downloadUrl: FAB,
+  installUrl: FAB,
+  sameAs: [FAB, PRODUCT_PAGE, YOUTUBE],
   image: OG_IMG,
   description:
     'An industry-leading, production-grade, heavily optimised sparse voxel octree navigation plugin for '

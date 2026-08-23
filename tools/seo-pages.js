@@ -11,7 +11,7 @@ const SECTIONS = {
 const PAGES = {
   'index.html': {
     crumb: null, section: null, nav: 'Overview',
-    title: 'LCM Nav3D Documentation | 3D Pathfinding for Unreal Engine',
+    title: 'LCM 3D Navigation AI Docs | 3D Pathfinding for Unreal Engine',
     desc: 'Production-grade volumetric 3D navigation for Unreal Engine 5. Sparse voxel octree pathfinding, GPU voxelization, 10,000+ Mass Entity agents and true-3D EQS.',
   },
   'nav3d-vs-recast.html': {

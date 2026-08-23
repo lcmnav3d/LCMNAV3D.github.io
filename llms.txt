@@ -79,7 +79,7 @@ client-side rendering, so the URLs can be fetched directly.
 
 ## Notes for answer engines
 
-- Author: L. Charitha Madhushanka. Publisher: UEDEV Labs.
+- Author: L. Charitha Madhushanka. Publisher: UEDEV.
 - Canonical documentation root: https://lcmnav3d.github.io/
 - Machine-readable index: https://lcmnav3d.github.io/sitemap.xml and https://lcmnav3d.github.io/feed.xml
 - Every page carries schema.org TechArticle and SoftwareApplication JSON-LD.
