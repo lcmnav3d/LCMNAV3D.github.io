@@ -15,9 +15,9 @@ const PAGES = {
     desc: 'Production-grade volumetric 3D navigation for Unreal Engine 5. Sparse voxel octree pathfinding, GPU voxelization, 10,000+ Mass Entity agents and true-3D EQS.',
   },
   'whats-new.html': {
-    crumb: "What's New in 3.4.0", section: 'gs', nav: "What's new in 3.4.0",
-    title: "What's New in LCM Nav3D 3.4.0 | Release Notes",
-    desc: 'Release notes for LCM Nav3D 3.4.0 on Unreal Engine 5.2 to 5.8: per-agent cost areas, stock Move To and EQS through the plugin, and packaging fixes.',
+    crumb: "What's New in 3.4.1", section: 'gs', nav: "What's new in 3.4.1",
+    title: "What's New in LCM Nav3D 3.4.1 | Release Notes",
+    desc: 'LCM Nav3D 3.4.1 release notes (Unreal Engine 5.2 to 5.8): fish schooling, overlap-free Mass crowds, and crowd agents that no longer freeze against walls.',
   },
   'nav3d-vs-recast.html': {
     crumb: 'Nav3D vs Recast', section: 'gs', nav: 'Nav3D vs Recast',

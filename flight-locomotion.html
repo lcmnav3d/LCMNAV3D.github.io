@@ -195,7 +195,7 @@
   <p id="q-status" class="visually-hidden" role="status" aria-live="polite"></p>
   <h4>Start here</h4>
   <a href="index.html" data-slug="index">Overview</a>
-  <a href="whats-new.html" data-slug="whats-new">What's new in 3.4.0</a>
+  <a href="whats-new.html" data-slug="whats-new">What's new in 3.4.1</a>
   <a href="nav3d-vs-recast.html" data-slug="nav3d-vs-recast">Nav3D vs Recast</a>
   <h4>Getting started</h4>
   <a href="installation.html" data-slug="installation">Installation</a>
@@ -1010,6 +1010,34 @@ so without the trim the bird climbs away (altitude error 61.5 → 186.4
 cm). The trim sets lift <em>magnitude</em> for equilibrium; the
 manoeuvre force supplies <em>perpendicular authority</em>. They are not
 redundant.</p>
+<h2 id="fish-schooling-on-pawns">Fish schooling on pawns</h2>
+<p>The Flight Movement component has a <strong>Schooling</strong> group
+(<code>LCM Flight|Schooling</code>). Turn on <strong>Enabled</strong>
+and, when a FlyTo task drives the body, it steers as a school member
+instead of by the task's avoidance (reactive push, wall whiskers, flock
+separation): personal space, collision anticipation, heading matching
+and closing up with other agents (pawns and a Mass school alike), and
+turning away from rocks and glass before reaching them. The task's route
+still says where to go, and a pawn with its own route always counts as
+informed.</p>
+<p>The settings are the same as on a Mass crowd; the table and the
+leadership, predator and burst-and-coast options are in <a href="mass-traits.html#dense-crowds-and-fish-schools-flow-field">the Mass Traits Reference</a>. Two differ for pawns:</p>
+<ul>
+<li><strong>Contact Push</strong> (default 0.5) pushes apart overlapping
+bodies, scaled by overlap depth.</li>
+<li>A predator is any body half again the fish's size or more that is
+not schooling with it, so a larger pawn on its own flight model (the
+Fish Tank's predator) sets off the escape.</li>
+</ul>
+<p>Console multipliers for tuning without editing assets:
+<code>r.LcmNav.FishSchool.ScaleRepulsion</code>,
+<code>ScaleAnticipation</code>, <code>ScaleAlign</code>,
+<code>ScaleAttract</code>, <code>ScaleWall</code>,
+<code>ScaleEscape</code>, <code>ScaleContactPush</code>,
+<code>ScaleBrake</code> (all 1 = as authored),
+<code>r.LcmNav.FishSchool.MaxCommandDeg</code> (-1 = the config's) and
+<code>r.LcmNav.FishSchool.Leadership</code> (0 = every fish steers for
+the goal).</p>
 <h2 id="hard-turns-progress-does-not-depend-on-hitting-a-sphere">Hard
 turns: progress does not depend on hitting a sphere</h2>
 <p>⚠ <strong>If a tighter Acceptance Radius makes your agents stick,

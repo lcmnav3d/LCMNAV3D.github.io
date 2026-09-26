@@ -2,8 +2,8 @@
 <html lang="en"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>What's New in LCM Nav3D 3.4.0 | Release Notes</title>
-<meta name="description" content="Release notes for LCM Nav3D 3.4.0 on Unreal Engine 5.2 to 5.8: per-agent cost areas, stock Move To and EQS through the plugin, and packaging fixes.">
+<title>What's New in LCM Nav3D 3.4.1 | Release Notes</title>
+<meta name="description" content="LCM Nav3D 3.4.1 release notes (Unreal Engine 5.2 to 5.8): fish schooling, overlap-free Mass crowds, and crowd agents that no longer freeze against walls.">
 <link rel="canonical" href="https://lcmnav3d.github.io/whats-new.html">
 <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
 <meta name="author" content="L. Charitha Madhushanka">
@@ -16,16 +16,16 @@
 <meta property="og:site_name" content="LCM Nav3D Documentation">
 <meta property="og:locale" content="en_GB">
 <meta property="og:url" content="https://lcmnav3d.github.io/whats-new.html">
-<meta property="og:title" content="What's New in LCM Nav3D 3.4.0 | Release Notes">
-<meta property="og:description" content="Release notes for LCM Nav3D 3.4.0 on Unreal Engine 5.2 to 5.8: per-agent cost areas, stock Move To and EQS through the plugin, and packaging fixes.">
+<meta property="og:title" content="What's New in LCM Nav3D 3.4.1 | Release Notes">
+<meta property="og:description" content="LCM Nav3D 3.4.1 release notes (Unreal Engine 5.2 to 5.8): fish schooling, overlap-free Mass crowds, and crowd agents that no longer freeze against walls.">
 <meta property="og:image" content="https://lcmnav3d.github.io/og.jpg">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="675">
 <meta property="og:image:alt" content="LCM Nav3D - True Volumetric 3D Navigation for Unreal Engine">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="What's New in LCM Nav3D 3.4.0 | Release Notes">
-<meta name="twitter:description" content="Release notes for LCM Nav3D 3.4.0 on Unreal Engine 5.2 to 5.8: per-agent cost areas, stock Move To and EQS through the plugin, and packaging fixes.">
+<meta name="twitter:title" content="What's New in LCM Nav3D 3.4.1 | Release Notes">
+<meta name="twitter:description" content="LCM Nav3D 3.4.1 release notes (Unreal Engine 5.2 to 5.8): fish schooling, overlap-free Mass crowds, and crowd agents that no longer freeze against walls.">
 <meta name="twitter:image" content="https://lcmnav3d.github.io/og.jpg">
 <meta name="twitter:image:alt" content="LCM Nav3D - True Volumetric 3D Navigation for Unreal Engine">
 <link rel="icon" href="favicon.png" type="image/png">
@@ -132,7 +132,7 @@
     {
      "@type": "ListItem",
      "position": 3,
-     "name": "What's New in 3.4.0",
+     "name": "What's New in 3.4.1",
      "item": "https://lcmnav3d.github.io/whats-new.html"
     }
    ]
@@ -140,9 +140,9 @@
   {
    "@type": "TechArticle",
    "@id": "https://lcmnav3d.github.io/whats-new.html#article",
-   "headline": "What's new in LCM Nav3D 3.4.0",
-   "name": "What's New in LCM Nav3D 3.4.0 | Release Notes",
-   "description": "Release notes for LCM Nav3D 3.4.0 on Unreal Engine 5.2 to 5.8: per-agent cost areas, stock Move To and EQS through the plugin, and packaging fixes.",
+   "headline": "What's new in LCM Nav3D 3.4.1",
+   "name": "What's New in LCM Nav3D 3.4.1 | Release Notes",
+   "description": "LCM Nav3D 3.4.1 release notes (Unreal Engine 5.2 to 5.8): fish schooling, overlap-free Mass crowds, and crowd agents that no longer freeze against walls.",
    "url": "https://lcmnav3d.github.io/whats-new.html",
    "inLanguage": "en",
    "isPartOf": {
@@ -195,7 +195,7 @@
   <p id="q-status" class="visually-hidden" role="status" aria-live="polite"></p>
   <h4>Start here</h4>
   <a href="index.html" data-slug="index">Overview</a>
-  <a href="whats-new.html" data-slug="whats-new" class="on" aria-current="page">What's new in 3.4.0</a>
+  <a href="whats-new.html" data-slug="whats-new" class="on" aria-current="page">What's new in 3.4.1</a>
   <a href="nav3d-vs-recast.html" data-slug="nav3d-vs-recast">Nav3D vs Recast</a>
   <h4>Getting started</h4>
   <a href="installation.html" data-slug="installation">Installation</a>
@@ -230,12 +230,54 @@
   <a href="api-reference.html" data-slug="api-reference">API reference</a>
  </nav>
  <main id="content">
-  <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Documentation</a><span class="sep" aria-hidden="true">/</span><a href="index.html#part-i-getting-started">Getting Started</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">What's New in 3.4.0</span></nav>
-  <h1 id="whats-new-in-lcm-nav3d-340">What's new in LCM Nav3D 3.4.0</h1>
-<p>Release 3.4.0 supports <strong>Unreal Engine 5.2 to 5.8</strong>. Each
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Documentation</a><span class="sep" aria-hidden="true">/</span><a href="index.html#part-i-getting-started">Getting Started</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">What's New in 3.4.1</span></nav>
+  <h1 id="whats-new-in-lcm-nav3d-341">What's new in LCM Nav3D 3.4.1</h1>
+<p>Release 3.4.1 supports <strong>Unreal Engine 5.2 to 5.8</strong>. Each
 engine version has its own build of the plugin, so install the one that
 matches your project.</p>
 <h2 id="new">New</h2>
+<ul>
+<li><strong>Fish schooling.</strong> Turn on <em>Schooling</em> on a Mass
+crowd or on a pawn's Flight Movement component and it steers as a school:
+personal space, collision anticipation, heading matching, and turning away
+from rocks and glass before reaching them. A few informed fish lead the
+rest, a predator sets off a fountain escape that spreads through the
+school, and fish swim in bursts and glides. Distances are in body lengths,
+so it works at any scale. See <a
+href="mass-traits.html#dense-crowds-and-fish-schools-flow-field">Mass
+traits</a> and <a href="flight-locomotion.html#fish-schooling-on-pawns">Fish
+schooling on pawns</a>.</li>
+<li><strong>Hold Avoidance and Contact Push</strong> for Mass crowds. Hold
+Avoidance Between Scans keeps separation on every frame, not every other
+one. Contact Push pushes apart bodies that overlap, including agents that
+have arrived, so a crowd no longer piles onto its goal.</li>
+</ul>
+<h2 id="changed">Changed</h2>
+<ul>
+<li><strong>City demo maps</strong> (Behavior Tree, StateTree and Mass)
+have new building facades, detailed trees and rooftop equipment. Collision
+and navigation are unchanged, and the maps use nothing outside the
+plugin.</li>
+<li>FlyTo's wall-avoidance whiskers no longer take nearby agents for walls;
+agent avoidance handles them. Set <code>r.LcmNav.WallAvoidIgnorePawns
+0</code> for the old behaviour.</li>
+</ul>
+<h2 id="fixes">Fixes</h2>
+<ul>
+<li><strong>Mass agents froze against rocks and walls.</strong> A crowd
+agent pushed off the flow field's covered space stopped and never moved
+again. It now steers back to the nearest covered point, and a still agent
+is still pushed out of solid.</li>
+<li><strong>Hitch when spawning agents at runtime.</strong> Agents spawned
+while the game runs were registered as dynamic obstacles, and every one of
+them cost a navigation rebuild. Navigating agents are no longer dynamic
+obstacles.</li>
+</ul>
+<h2 id="lcm-nav3d-340">LCM Nav3D 3.4.0</h2>
+<p>Release 3.4.0 supports <strong>Unreal Engine 5.2 to 5.8</strong>. Each
+engine version has its own build of the plugin, so install the one that
+matches your project.</p>
+<h3 id="340-new">New</h3>
 <ul>
 <li><strong>Cost areas and query filters.</strong> Mark volumes as storms,
 preferred lanes, toll gates or no-fly zones with stock NavArea classes, and
@@ -266,7 +308,7 @@ StateTree and Mass versions: <em>Cost Areas</em> and <em>Cost Areas,
 Streamed</em> (six labelled stations), and <em>Fish Tank</em> (a 120 cm
 aquarium navigated at 1 cm).</li>
 </ul>
-<h2 id="changed">Changed</h2>
+<h3 id="340-changed">Changed</h3>
 <ul>
 <li>The plugin sets <code>mass.FullyParallel 0</code> at startup. It avoids a
 UE 5.2 Mass phase-order ensure that froze the editor for seconds, and it was
@@ -281,7 +323,7 @@ update, with buttons that open the new demo maps and guides. Reopen it from the 
 toolbar menu.</li>
 <li>The demo HUD shows the plugin's current version.</li>
 </ul>
-<h2 id="fixes">Fixes</h2>
+<h3 id="340-fixes">Fixes</h3>
 <ul>
 <li><strong>Packaged sample project:</strong> a packaged build started on an
 empty screen, because the demo menu and its maps were not cooked. The menu

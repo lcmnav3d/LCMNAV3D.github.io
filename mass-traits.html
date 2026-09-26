@@ -195,7 +195,7 @@
   <p id="q-status" class="visually-hidden" role="status" aria-live="polite"></p>
   <h4>Start here</h4>
   <a href="index.html" data-slug="index">Overview</a>
-  <a href="whats-new.html" data-slug="whats-new">What's new in 3.4.0</a>
+  <a href="whats-new.html" data-slug="whats-new">What's new in 3.4.1</a>
   <a href="nav3d-vs-recast.html" data-slug="nav3d-vs-recast">Nav3D vs Recast</a>
   <h4>Getting started</h4>
   <a href="installation.html" data-slug="installation">Installation</a>
@@ -382,6 +382,144 @@ for 10K-scale crowds sharing goals (finite worlds).</td>
 <p>Mode-specific properties hide automatically via
 <code>EditCondition</code>. Common movement knobs (radius, speed, accel,
 turn-rate, avoidance style, flight style, lane bias) apply to both.</p>
+<h4 id="dense-crowds-and-fish-schools-flow-field">Dense crowds and fish
+schools (Flow Field)</h4>
+<p>Three settings on the Agent trait for crowds whose bodies must not
+overlap:</p>
+<ul>
+<li><strong>Hold Avoidance Between Scans</strong> (default off). The
+neighbour scan runs every other frame
+(<code>r.LcmNav.Mass.FlowAvoidStride</code>). Off, the frames in between
+steer with no avoidance, so agents feel half their separation. On, those
+frames reuse the last result. Crowds tuned with it off get about twice
+the avoidance they were tuned for, so re-check their arrivals.</li>
+<li><strong>Contact Push</strong> (default 0, Reactive style). Pushes
+apart two agents whose bodies overlap: a velocity of (overlap depth /
+radii sum) x Max Speed x this. Arrived agents that overlap keep
+separating, so a crowd no longer piles onto its goal. 0.5 is a firm,
+smooth push.</li>
+<li><strong>Schooling</strong>. Steer as a fish school instead of by the
+Avoidance Style: keep personal space, anticipate collisions, match
+neighbours' heading and close up to them, and turn away from rocks and
+glass before reaching them. The flow field still says where to go. All
+distances are in body lengths (BL), so one config works at any scale.
+The same settings sit on a pawn's Flight Movement component (see the
+Flight Locomotion Reference).</li>
+</ul>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Table">
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Enabled</strong></td>
+<td>off</td>
+<td>Use the school model instead of the generic avoidance.</td>
+</tr>
+<tr>
+<td><strong>Body Length Cm</strong></td>
+<td>0 (= 4 x collision radius)</td>
+<td>The unit every other distance is measured in.</td>
+</tr>
+<tr>
+<td><strong>Body Width BL</strong></td>
+<td>0.25</td>
+<td>Body width as a fraction of length. Contact and personal space are
+measured between fish-shaped bodies.</td>
+</tr>
+<tr>
+<td><strong>Perception BL</strong> / <strong>Max
+Neighbours</strong></td>
+<td>4 / 7</td>
+<td>How far a fish notices others, and how many of the nearest it
+responds to.</td>
+</tr>
+<tr>
+<td><strong>Repulsion BL</strong> / <strong>Align BL</strong></td>
+<td>1.0 / 2.5</td>
+<td>Personal space (inside it the fish only moves away), and the range
+where it matches heading; beyond it, it closes up.</td>
+</tr>
+<tr>
+<td><strong>Blind Angle Deg</strong></td>
+<td>60</td>
+<td>Rear cone where neighbours are not seen for alignment and
+attraction.</td>
+</tr>
+<tr>
+<td><strong>Goal / Repulsion / Align / Attract Weight</strong></td>
+<td>1.0 / 2.0 / 0.6 / 0.3</td>
+<td>How much each term steers.</td>
+</tr>
+<tr>
+<td><strong>Anticipation Weight</strong> / <strong>Seconds</strong></td>
+<td>1.5 / 1.5 s</td>
+<td>Steer off a collision course before it happens.</td>
+</tr>
+<tr>
+<td><strong>Wall Weight</strong> / <strong>Wall Range BL</strong></td>
+<td>3.0 / 2.0</td>
+<td>Turn away from rocks and glass before reaching them.</td>
+</tr>
+<tr>
+<td><strong>Steer Smoothing Seconds</strong></td>
+<td>0.2 s</td>
+<td>How quickly the heading follows the terms.</td>
+</tr>
+<tr>
+<td><strong>Max Command Angle Deg</strong></td>
+<td>60</td>
+<td>The command stays this close to the nose, so the body turns instead
+of skidding.</td>
+</tr>
+<tr>
+<td><strong>Min Speed Fraction</strong></td>
+<td>0.35</td>
+<td>Slowest a schooling fish swims (fish do not hover).</td>
+</tr>
+<tr>
+<td><strong>Leadership: Informed Fraction</strong></td>
+<td>1.0</td>
+<td>Fraction of the school that steers for the goal; the rest follow
+their neighbours (Couzin et al. 2005).</td>
+</tr>
+<tr>
+<td><strong>Leadership: Uninformed Goal Scale</strong> / <strong>Goal
+Standoff BL</strong> / <strong>Goal Contention BL</strong></td>
+<td>0.1 / 0 / 2.0</td>
+<td>How much followers still steer for the goal; where the goal's pull
+fades; when a goal another fish holds counts as reached.</td>
+</tr>
+<tr>
+<td><strong>Predator: Threat Range BL</strong> / <strong>Escape
+Weight</strong></td>
+<td>5 / 4</td>
+<td>A body half again this fish's size or more that is not schooling
+with it is fled from, by the fountain manoeuvre.</td>
+</tr>
+<tr>
+<td><strong>Predator: Alarm Spread</strong> / <strong>Alarm Decay
+Seconds</strong> / <strong>Alarm Cohesion</strong></td>
+<td>0.8 / 1.5 s / 1.0</td>
+<td>How alarm passes between schoolmates, how fast it fades, and how
+much an alarmed school tightens.</td>
+</tr>
+<tr>
+<td><strong>Swimming: Burst And Coast</strong></td>
+<td>off</td>
+<td>Kick, then glide, turning mostly at the kick. <strong>Kick
+Period</strong>, <strong>Burst Fraction</strong> and <strong>Burst Speed
+Swing</strong> shape it.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The Fish Tank demo maps (Behavior Tree, StateTree, Mass) use it.</p>
 <h3
 id="heavy_plus_sign-lcm-nav3d-goal---auto-pathing-path-following-only">➕
 <code>LCM Nav3D Goal</code> - auto-pathing (Path Following only)</h3>
@@ -644,6 +782,26 @@ you spawned them.</li>
 <td><code>r.LcmNav.Mass.Anticipatory</code></td>
 <td>−1 (per-trait)</td>
 <td>Route Flow crowds around where obstacles are <em>heading</em>.</td>
+</tr>
+<tr>
+<td><code>r.LcmNav.Mass.FlowAvoidHold</code></td>
+<td>−1 (per-trait)</td>
+<td>Force Hold Avoidance Between Scans on (1) or off (0).</td>
+</tr>
+<tr>
+<td><code>r.LcmNav.Mass.FlowContactPush</code></td>
+<td>−1 (per-trait)</td>
+<td>Force one Contact Push gain for every Reactive-style crowd.</td>
+</tr>
+<tr>
+<td><code>r.LcmNav.Mass.FlowMissRecovery</code></td>
+<td>1</td>
+<td>A finite-world Flow agent pushed off the field's covered space (against a rock or a wall) steers back to the nearest covered point instead of stopping. 0 = old behaviour (it holds).</td>
+</tr>
+<tr>
+<td><code>r.LcmNav.FishSchool.Enable</code></td>
+<td>1</td>
+<td>0 = every crowd and pawn with Schooling on falls back to its generic avoidance.</td>
 </tr>
 </tbody>
 </table>

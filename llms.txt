@@ -30,7 +30,7 @@ client-side rendering, so the URLs can be fetched directly.
 ## Start here
 
 - [Overview](https://lcmnav3d.github.io/): Production-grade volumetric 3D navigation for Unreal Engine 5. Sparse voxel octree pathfinding, GPU voxelization, 10,000+ Mass Entity agents and true-3D EQS.
-- [What's new in 3.4.0](https://lcmnav3d.github.io/whats-new.html): Release notes for LCM Nav3D 3.4.0 on Unreal Engine 5.2 to 5.8: per-agent cost areas, stock Move To and EQS through the plugin, and packaging fixes.
+- [What's new in 3.4.1](https://lcmnav3d.github.io/whats-new.html): LCM Nav3D 3.4.1 release notes (Unreal Engine 5.2 to 5.8): fish schooling, overlap-free Mass crowds, and crowd agents that no longer freeze against walls.
 - [Nav3D vs Recast](https://lcmnav3d.github.io/nav3d-vs-recast.html): Why Unreal's Recast navmesh cannot represent open air, where each flying-AI workaround breaks down, and when volumetric SVO navigation is the right answer instead.
 
 ## Getting started
