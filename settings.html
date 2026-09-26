@@ -171,8 +171,8 @@
    "publisher": {
     "@id": "https://lcmnav3d.github.io/#organization"
    },
-   "datePublished": "2026-08-23",
-   "dateModified": "2026-08-23",
+   "datePublished": "2026-09-26",
+   "dateModified": "2026-09-26",
    "proficiencyLevel": "Beginner",
    "dependencies": "Unreal Engine 5.2 to 5.8"
   }
@@ -195,6 +195,7 @@
   <p id="q-status" class="visually-hidden" role="status" aria-live="polite"></p>
   <h4>Start here</h4>
   <a href="index.html" data-slug="index">Overview</a>
+  <a href="whats-new.html" data-slug="whats-new">What's new in 3.4.0</a>
   <a href="nav3d-vs-recast.html" data-slug="nav3d-vs-recast">Nav3D vs Recast</a>
   <h4>Getting started</h4>
   <a href="installation.html" data-slug="installation">Installation</a>
@@ -207,8 +208,11 @@
   <a href="tactical-eqs.html" data-slug="tactical-eqs">Tactical EQS in true 3D</a>
   <a href="ai-perception.html" data-slug="ai-perception">AI perception</a>
   <a href="hybrid-recast.html" data-slug="hybrid-recast">Hybrid Recast + Nav3D</a>
-  <a href="nav-links-and-areas.html" data-slug="nav-links-and-areas">Nav links and area modifiers</a>
+  <a href="nav-links-and-areas.html" data-slug="nav-links-and-areas">Cost areas and NavLinks</a>
   <a href="gameplay-debugger.html" data-slug="gameplay-debugger">The Gameplay Debugger</a>
+  <a href="small-worlds.html" data-slug="small-worlds">Small worlds</a>
+  <a href="fly-to-location.html" data-slug="fly-to-location">Fly To Location node</a>
+  <a href="stock-navigation.html" data-slug="stock-navigation">Stock Move To and EQS</a>
   <h4>Behaviour Tree patterns</h4>
   <a href="bt-wait.html" data-slug="bt-wait">Wait</a>
   <a href="bt-is-at-location.html" data-slug="bt-is-at-location">Is At Location</a>
@@ -283,6 +287,41 @@ they move.</p>
 or streaming world. Finite is simpler, faster and more predictable.</p>
 <p>Ticking this hides <code>World Extent</code> and reveals
 <code>Chunk Size</code> and the skeleton options.</p>
+<p><strong>Levels that stream in late.</strong> When a streaming level
+loads after the navigation around it was already built, the chunks it
+overlaps are rebuilt automatically, so its geometry does not stay open
+air. Three console variables control this:</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Table">
+<table>
+<thead>
+<tr>
+<th>Console variable</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>r.LcmNav.Streaming.RevoxelizeOnLevelStreamIn</code></td>
+<td><code>1</code></td>
+<td>Rebuild the chunks a newly streamed level overlaps. <code>0</code>
+turns it off</td>
+</tr>
+<tr>
+<td><code>r.LcmNav.Streaming.RevoxelizeGraceSeconds</code></td>
+<td><code>2</code></td>
+<td>Chunks built within this many seconds after the level arrived are
+rebuilt too</td>
+</tr>
+<tr>
+<td><code>r.LcmNav.Streaming.RevoxelizeMaxPerTick</code></td>
+<td><code>8</code></td>
+<td>Most chunks released for rebuild per frame, so the work is spread
+out</td>
+</tr>
+</tbody>
+</table>
+</div>
 <h3
 id="auto-build-on-play-default-on-finite-only"><code>Auto Build On Play</code>:
 default <strong>on</strong> <em>(finite only)</em></h3>
@@ -473,6 +512,55 @@ down from the world/chunk size, so effective resolution snaps to powers
 of two. 100 → 90 may change nothing; 100 → 60 may double memory. Tune by
 testing.</p>
 </blockquote>
+<h3 id="world-scale-default-standard"><code>World Scale</code>: default
+<strong>Standard</strong></h3>
+<p>Which set of centimetre constants the manager uses.
+<code>Standard</code> is the shipped tuning for metre-scale worlds at a
+100 cm leaf and is byte-identical to earlier releases.
+<code>Small</code> derives those constants from the finest leaf this
+manager produces - Clearance Padding becomes half the leaf (written into
+the property, which turns read-only), and the start-rescue probe
+distances and the large-node cost threshold scale with it - so a
+centimetre-scale world such as a 120 × 70 × 40 cm aquarium at 1 cm
+voxels gets defaults that mean the same thing. <code>Custom</code> keeps
+whatever you set. Change <code>Min Voxel Size</code>,
+<code>World Extent</code> or <code>Chunk Size</code> under
+<code>Small</code> and the padding is re-derived; it is re-derived again
+at BeginPlay so config-driven setups match the editor.</p>
+<p><code>Min Voxel Size</code> now accepts down to <strong>0.5
+cm</strong> and <code>World Extent</code> down to <strong>50
+cm</strong>. The finest leaf is 2-4× <code>Min Voxel Size</code>, so set
+half the leaf you want and make the world edge a power-of-two multiple
+of it. Small worlds are small in <em>leaves</em> too: below ~32 leaves
+across, node count grows nearly with volume as the leaf shrinks (the
+panel says so). See <a href="small-worlds.html">Small
+Worlds</a>.</p>
+<p>A few centimetre constants follow the leaf on every profile, because
+they live in the generator and the solver rather than on the manager:
+the neighbour-probe offset, the voxel line-of-sight sampling step, the
+waypoint-merge tolerance and the route executor's sampling floors are
+bounded by the finest leaf of the navigation data itself. They keep
+their previous values at production leaf sizes; there is nothing to
+set.</p>
+<h3 id="padding-mode-default-centimetres"><code>Padding Mode</code>:
+default <strong>Centimetres</strong></h3>
+<p>How <code>Clearance Padding</code> is expressed.
+<code>Centimetres</code> keeps the value you enter. <code>Leaves</code>
+derives it as <code>Clearance Padding Leaves</code> × the finest leaf
+whenever the leaf changes (and again at BeginPlay), so the blocked band
+around every surface stays the same number of leaves thick at every
+<code>Min Voxel Size</code>. That is the condition under which halving
+the leaf grows the octree by the surface law (about 4× per halving)
+instead of by a band that thickens, in leaves, as the leaf shrinks,
+which keeps the growth per halving under about 4.5×.
+<code>World Scale = Small</code> already derives half a leaf and takes
+precedence.</p>
+<h3
+id="clearance-padding-leaves-default-05"><code>Clearance Padding Leaves</code>:
+default <strong>0.5</strong></h3>
+<p>The multiple used under <code>Padding Mode = Leaves</code>. 0.5
+inflates every surface by half a leaf, which is what <code>Small</code>
+derives. <em>Range: 0-4.</em></p>
 <h3
 id="clearance-padding-default-100-cm"><code>Clearance Padding</code>:
 default <strong>100 cm</strong></h3>
@@ -521,11 +609,15 @@ id="allowed-obstacle-classes"><code>Allowed Obstacle Classes</code></h3>
 <hr />
 <h2 id="4-performance">4. Performance</h2>
 <h3
-id="use-gpu-voxelization-default-on"><code>Use GPU Voxelization</code>:
-default <strong>on</strong></h3>
-<p>Builds the octree on the GPU, which is substantially faster. Falls
-back to CPU automatically if no suitable GPU is present. Turn it off
-only to force deterministic, reproducible builds.</p>
+id="voxelization-method-default-auto"><code>Voxelization Method</code>:
+default <strong>Auto</strong></h3>
+<p>Where the octree is built. <code>Auto</code> builds it on the GPU,
+which is substantially faster, and falls back to the CPU automatically
+if no suitable GPU is present. <code>GPU</code> asks for the GPU
+explicitly, and <code>CPU</code> always builds on the CPU. Choose
+<code>CPU</code> only to force deterministic, reproducible builds.</p>
+<p>Levels saved with the older <code>Use GPU Voxelization</code>
+checkbox are converted to this setting when they load.</p>
 <h3
 id="max-generations-per-frame-default-1"><code>Max Generations Per Frame</code>:
 default <strong>1</strong></h3>
@@ -651,6 +743,36 @@ id="debug-redraw-coalesce-seconds-default-025-s"><code>Debug Redraw Coalesce Sec
 default <strong>0.25 s</strong></h3>
 <p>How long debug redraws are batched. Raise it if debug drawing itself
 is hurting frame rate.</p>
+<h3 id="cost-areas-subcategory">Cost Areas subcategory</h3>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Table">
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Cost View</code></td>
+<td><em>Off</em></td>
+<td>Draws the cost areas while playing. <em>Regions</em>: each volume
+and what it costs. <em>Heat</em>: the octree tinted by price. The
+console variable <code>r.LcmNav.CostView 0/1/2</code> overrides it;
+<code>-1</code> hands control back</td>
+</tr>
+<tr>
+<td><code>Cost View Filter</code></td>
+<td><em>none</em></td>
+<td>Whose eyes the view looks through: a stock Navigation Query Filter
+class. Empty = each area's own defaults</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>See <a href="nav-links-and-areas.html">Tutorial
+10</a> for cost areas themselves.</p>
 <blockquote>
 <p><strong><code>Force Redraw SVO</code> was removed.</strong> It was a
 checkbox that instantly unchecked itself, and it was destructive: on a
@@ -760,6 +882,13 @@ identical surface, in six numbered sections:</p>
 <td><em>(StateTree only)</em> moving goal; overrides Target Location
 when chase is on</td>
 </tr>
+<tr>
+<td><code>Timeout Seconds</code></td>
+<td><code>0</code> (no limit)</td>
+<td><em>(advanced)</em> Report <strong>Failed</strong> after this long
+in flight. For a goal that keeps moving away, or one reached only by a
+very long route</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -775,6 +904,18 @@ when chase is on</td>
 </tr>
 </thead>
 <tbody>
+<tr>
+<td><code>Agent Scale</code></td>
+<td><code>0</code> (= World Scale)</td>
+<td>always</td>
+<td>Multiplies every centimetre and speed value on the task (acceptance
+radius, speed, acceleration, deceleration distance, wall check,
+separation, drift replan, Minimum Agent Size and the follower's internal
+floors). <code>0</code> follows the manager's <strong>World
+Scale</strong>: 1 under <em>Standard</em>, finest leaf / 100 cm under
+<em>Small</em> (0.01 in a 1 cm world). A driving flight component adopts
+the same scale unless its own <code>Agent Scale</code> is set</td>
+</tr>
 <tr>
 <td><code>Use Flight Movement Component</code></td>
 <td>off</td>
@@ -849,6 +990,19 @@ live.</p>
 <td>-</td>
 <td>Solver, heuristic, smoothing, agent size, wall-distance
 preference</td>
+</tr>
+<tr>
+<td><code>Query Options &gt; Filter Class</code></td>
+<td><em>none</em></td>
+<td>The stock Navigation Query Filter this agent sees cost areas
+through. Empty = the AI controller's <strong>Default Navigation Filter
+Class</strong></td>
+</tr>
+<tr>
+<td><code>Query Options &gt; Require Complete Path</code></td>
+<td>off</td>
+<td><em>(advanced)</em> Fail a request whose route stops short of the
+goal, instead of returning the part that can be planned now</td>
 </tr>
 </tbody>
 </table>
@@ -973,8 +1127,80 @@ Manager. They used to be one checkbox named for the half it mostly
 wasn't.</p>
 </blockquote>
 <p>Solver and smoothing choices are described in <a
-href="core-concepts.html#6-how-a-path-is-actually-found">Tutorial 02
-§6</a>.</p>
+href="core-concepts.html#6-how-a-path-is-actually-found">Tutorial
+02 §6</a>.</p>
+<blockquote>
+<p><strong>StateTree tasks that finish at once.</strong> On UE 5.2 a
+task that completes, completes its whole state, so a FlyTo beside it
+stops. Find Cover, Chunk Prewarm, Streaming Aware, Find Actor By Tag and
+Pick Random Goal have <strong>Stay Running After Resolve</strong>: tick
+it when the task shares a state with a FlyTo, and the state runs until
+the FlyTo completes.</p>
+</blockquote>
+<h2 id="console-variables-new-in-34">Console variables new in 3.4</h2>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Table">
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>r.LcmNav.CostView</code></td>
+<td><code>-1</code></td>
+<td>Cost view override: 0 off, 1 regions, 2 heat. <code>-1</code> = the
+manager's <strong>Cost View</strong></td>
+</tr>
+<tr>
+<td><code>r.LcmNav.Bridge.AutoRegister</code></td>
+<td><code>1</code></td>
+<td>Register the navigation proxy so stock Move To and EQS plan through
+LCM Nav3D</td>
+</tr>
+<tr>
+<td><code>r.LcmNav.Bridge.ClaimDefaultAgent</code></td>
+<td><code>1</code></td>
+<td>With no Recast navmesh in the world, the proxy serves the default
+agent. See <a href="stock-navigation.html">Tutorial
+14</a></td>
+</tr>
+<tr>
+<td><code>r.LcmNav.MacroPath.KnownFallback</code></td>
+<td><code>1</code></td>
+<td>When the coarse search reaches its limit, route through the streamed
+chunks instead of failing</td>
+</tr>
+<tr>
+<td><code>r.LcmNav.MacroPath.CapRetrySec</code></td>
+<td><code>5</code></td>
+<td>After that happens, how long a route searches the streamed chunks
+only</td>
+</tr>
+<tr>
+<td><code>r.LcmNav.MacroPath.CapRetryMaxSec</code></td>
+<td><code>60</code></td>
+<td>The wait doubles each time the full search reaches its limit again,
+up to this</td>
+</tr>
+<tr>
+<td><code>r.LcmNav.Mass.SerialPhases</code></td>
+<td><code>1</code></td>
+<td>Sets <code>mass.FullyParallel 0</code> at startup (see <a
+href="troubleshooting.html">Troubleshooting</a>). <code>0</code> leaves it
+alone</td>
+</tr>
+<tr>
+<td><code>r.LcmNav.Mass.FlowAsyncBootstrap</code></td>
+<td><code>1</code></td>
+<td>A crowd's first flow field is built off the game thread.
+<code>0</code> = on the game thread, as before 3.4</td>
+</tr>
+</tbody>
+</table>
+</div>
 <hr />
 <h2 id="recommended-starting-points">Recommended starting points</h2>
 <div class="table-wrap" tabindex="0" role="region" aria-label="Table">
@@ -1022,7 +1248,6 @@ href="core-concepts.html#6-how-a-path-is-actually-found">Tutorial 02
 </div>
 <p>Start here, then confirm with <code>Draw Debug Volumes</code> that
 the gaps you care about actually have voxels in them.</p>
-
   <div class="pager"><a href="editor-tools.html">&larr; Editor tools</a><a href="troubleshooting.html">Troubleshooting &rarr;</a></div>
   <footer>
    <p><strong>LCM Nav3D</strong> True Volumetric 3D Navigation for Unreal Engine &nbsp;|&nbsp;

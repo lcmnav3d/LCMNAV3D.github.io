@@ -9,7 +9,7 @@ Live at **https://lcmnav3d.github.io/**
 | Path | What it is |
 |---|---|
 | `index.html` | Documentation overview and table of contents |
-| `*.html` | One page per chapter (25 pages) |
+| `*.html` | One page per chapter (27 pages) |
 | `404.html` | Not-found page, served by GitHub Pages for any missing path |
 | `style.css` | The whole stylesheet, light and dark |
 | `search.js` | Sidebar search and mobile navigation |

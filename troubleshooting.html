@@ -171,8 +171,8 @@
    "publisher": {
     "@id": "https://lcmnav3d.github.io/#organization"
    },
-   "datePublished": "2026-08-23",
-   "dateModified": "2026-08-23",
+   "datePublished": "2026-09-26",
+   "dateModified": "2026-09-26",
    "proficiencyLevel": "Beginner",
    "dependencies": "Unreal Engine 5.2 to 5.8"
   },
@@ -265,6 +265,7 @@
   <p id="q-status" class="visually-hidden" role="status" aria-live="polite"></p>
   <h4>Start here</h4>
   <a href="index.html" data-slug="index">Overview</a>
+  <a href="whats-new.html" data-slug="whats-new">What's new in 3.4.0</a>
   <a href="nav3d-vs-recast.html" data-slug="nav3d-vs-recast">Nav3D vs Recast</a>
   <h4>Getting started</h4>
   <a href="installation.html" data-slug="installation">Installation</a>
@@ -277,8 +278,11 @@
   <a href="tactical-eqs.html" data-slug="tactical-eqs">Tactical EQS in true 3D</a>
   <a href="ai-perception.html" data-slug="ai-perception">AI perception</a>
   <a href="hybrid-recast.html" data-slug="hybrid-recast">Hybrid Recast + Nav3D</a>
-  <a href="nav-links-and-areas.html" data-slug="nav-links-and-areas">Nav links and area modifiers</a>
+  <a href="nav-links-and-areas.html" data-slug="nav-links-and-areas">Cost areas and NavLinks</a>
   <a href="gameplay-debugger.html" data-slug="gameplay-debugger">The Gameplay Debugger</a>
+  <a href="small-worlds.html" data-slug="small-worlds">Small worlds</a>
+  <a href="fly-to-location.html" data-slug="fly-to-location">Fly To Location node</a>
+  <a href="stock-navigation.html" data-slug="stock-navigation">Stock Move To and EQS</a>
   <h4>Behaviour Tree patterns</h4>
   <a href="bt-wait.html" data-slug="bt-wait">Wait</a>
   <a href="bt-is-at-location.html" data-slug="bt-is-at-location">Is At Location</a>
@@ -500,6 +504,29 @@ long routes.</li>
 <strong><code>Auto Build On Play</code></strong> is on, or that you call
 <code>BuildSVO</code>. With <code>Draw Debug Volumes</code> on, you
 should see the octree at <code>BeginPlay</code>.</p>
+<h3 id="it-fails-only-for-some-agents-cost-areas">It fails only for some
+agents: cost areas</h3>
+<p>Call <strong><code>Get Last Path Cost Failure</code></strong> on the
+manager.</p>
+<ul>
+<li><strong>Goal In Excluded Area</strong>: the goal is inside a volume
+this agent's filter excludes (or a No-Fly / Null area). Move the goal,
+or give the agent a filter that allows it.</li>
+<li><strong>No Route Under Filter</strong>: every way to the goal
+crosses an excluded volume. Open a gap, or change the filter.</li>
+</ul>
+<p>Set the manager's <strong>Cost View</strong> to <em>Regions</em> and
+its <strong>Cost View Filter</strong> to that agent's filter to see the
+world as it does. See <a
+href="nav-links-and-areas.html">Tutorial 10</a>.</p>
+<h3 id="the-route-stops-short-of-the-goal">The route stops short of the
+goal</h3>
+<p>In a streamed world, part of the way may not be generated yet. Find
+Path returns that partial route on purpose, and the agent follows it
+while the rest streams in.
+<strong><code>Find Path Detailed</code></strong> tells you whether a
+route is Complete or Partial; <strong>Require Complete Path</strong> in
+the query options makes a partial route fail instead.</p>
 <hr />
 <h2 id="4-agents-ignore-geometry">4. Agents ignore geometry</h2>
 <p>If agents fly through a wall, the wall isn't in the octree.</p>
@@ -515,7 +542,11 @@ out?</strong> Empty = allow everything, which is what you normally
 want.</li>
 <li><strong>Was it added after the build?</strong> Static geometry is
 baked at build time. Something spawned later needs either a rebuild or a
-Dynamic Obstacle component.</li>
+Dynamic Obstacle component. In an infinite world, a level that streams
+in after its area was built is picked up automatically: the chunks it
+overlaps are rebuilt (see <a
+href="settings.html#infinite-world-default-off">Infinite
+World</a>).</li>
 <li><strong>Is it too thin?</strong> Geometry thinner than a voxel can
 be missed. Lower <code>Min Voxel Size</code>, or thicken the
 collision.</li>
@@ -545,7 +576,8 @@ when streaming</h3>
 <ul>
 <li>Raise <strong><code>Min Voxel Size</code></strong> (the biggest
 lever by far).</li>
-<li>Keep <strong><code>Use GPU Voxelization</code></strong> on.</li>
+<li>Keep <strong><code>Voxelization Method</code></strong> on
+<code>Auto</code> (GPU).</li>
 <li>Lower <strong><code>Max Generations Per Frame</code></strong> to
 spread work (world fills in more slowly, but smoothly).</li>
 </ul>
@@ -559,8 +591,8 @@ cap per-frame planning.</li>
 <li>For agents sharing a goal, enable
 <strong><code>Use Flow Fields</code></strong>.</li>
 <li><strong>Past a few hundred agents, move to <a
-href="mass-entity-crowds.html">Mass Entity</a>.</strong> Actor ticks,
-not pathfinding, are the ceiling.</li>
+href="mass-entity-crowds.html">Mass Entity</a>.</strong> Actor
+ticks, not pathfinding, are the ceiling.</li>
 </ul>
 <h3 id="memory-too-high">Memory too high</h3>
 <ul>
@@ -616,6 +648,19 @@ href="installation.html#method-b-manual-install-into-your-project">Tutorial
 <td>Call <strong><code>Build SVO In Editor</code></strong> on the
 manager; EQS previews need navigation data without playing</td>
 </tr>
+<tr>
+<td>Stock Move To ignores LCM Nav3D</td>
+<td>The log says <strong>NotClaimed</strong>: a Recast navmesh owns the
+default agent. Add a Supported Agent for LCM Nav3D (<a
+href="stock-navigation.html">Tutorial 14</a>)</td>
+</tr>
+<tr>
+<td>Log line "mass.FullyParallel set to 0"</td>
+<td>Expected. The plugin runs Mass phases serially to avoid a UE 5.2
+phase-order ensure that froze the editor for seconds, and it was also
+faster at 10,000 agents. It never overrides a value you set. To opt out:
+<code>r.LcmNav.Mass.SerialPhases 0</code></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -625,7 +670,8 @@ multiplayer</h2>
 <p>If you need identical results across runs (replays, lockstep,
 automated tests):</p>
 <ul>
-<li>Turn <strong><code>Use GPU Voxelization</code></strong> off.</li>
+<li>Set <strong><code>Voxelization Method</code></strong> to
+<code>CPU</code>.</li>
 </ul>
 <p>Path solving already runs on the CPU and is deterministic by design.
 Voxelization is the part that can vary: GPU execution order isn't
@@ -655,7 +701,6 @@ First reply within 24 hours on weekdays. <code>#support-faq</code> there
 carries this same triage list, and <code>#known-issues</code> tracks
 confirmed defects with their workarounds - worth checking before you
 write.</p>
-
   <div class="pager"><a href="settings.html">&larr; Settings reference</a><a href="flight-locomotion.html">Flight and locomotion &rarr;</a></div>
   <footer>
    <p><strong>LCM Nav3D</strong> True Volumetric 3D Navigation for Unreal Engine &nbsp;|&nbsp;

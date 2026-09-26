@@ -18,7 +18,7 @@ const ROOT = process.argv[2];
 const SITE = 'https://lcmnav3d.github.io';
 const OG_IMG = `${SITE}/og.jpg`;
 const OG_W = 1200, OG_H = 675;
-const BUILD_DATE = '2026-08-23';
+const BUILD_DATE = '2026-09-26';
 const AUTHOR = 'L. Charitha Madhushanka';
 const PUBLISHER = 'UEDEV';
 const PUBLISHER_URL = 'https://uedevlabs.github.io/';
@@ -394,7 +394,7 @@ ${NAV.map(sec => `## ${sec.heading}\n\n` + sec.items.map(f =>
 
 ## Other resources
 
-- [Full manual (PDF, 127 pages)](${SITE}/pdf/LCM_Nav3D_Manual.pdf): every chapter in one bookmarked, searchable file.
+- [Full manual (PDF, 136 pages)](${SITE}/pdf/LCM_Nav3D_Manual.pdf): every chapter in one bookmarked, searchable file.
 - [Quick start (PDF, 13 pages)](${SITE}/pdf/LCM_Nav3D_QuickStart.pdf): install, the five settings that matter, and a pawn flying in about forty-five minutes.
 - [Get the plugin on Fab](${FAB}): the official listing.
 - [Free playable demo](https://uedevlabs.itch.io/lcm-3d-navigation): all 18 demo maps in a standalone Windows build - try it before buying.

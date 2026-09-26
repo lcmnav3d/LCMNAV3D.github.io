@@ -171,8 +171,8 @@
    "publisher": {
     "@id": "https://lcmnav3d.github.io/#organization"
    },
-   "datePublished": "2026-08-23",
-   "dateModified": "2026-08-23",
+   "datePublished": "2026-09-26",
+   "dateModified": "2026-09-26",
    "proficiencyLevel": "Beginner",
    "dependencies": "Unreal Engine 5.2 to 5.8"
   }
@@ -195,6 +195,7 @@
   <p id="q-status" class="visually-hidden" role="status" aria-live="polite"></p>
   <h4>Start here</h4>
   <a href="index.html" data-slug="index">Overview</a>
+  <a href="whats-new.html" data-slug="whats-new">What's new in 3.4.0</a>
   <a href="nav3d-vs-recast.html" data-slug="nav3d-vs-recast">Nav3D vs Recast</a>
   <h4>Getting started</h4>
   <a href="installation.html" data-slug="installation">Installation</a>
@@ -207,8 +208,11 @@
   <a href="tactical-eqs.html" data-slug="tactical-eqs">Tactical EQS in true 3D</a>
   <a href="ai-perception.html" data-slug="ai-perception">AI perception</a>
   <a href="hybrid-recast.html" data-slug="hybrid-recast">Hybrid Recast + Nav3D</a>
-  <a href="nav-links-and-areas.html" data-slug="nav-links-and-areas">Nav links and area modifiers</a>
+  <a href="nav-links-and-areas.html" data-slug="nav-links-and-areas">Cost areas and NavLinks</a>
   <a href="gameplay-debugger.html" data-slug="gameplay-debugger">The Gameplay Debugger</a>
+  <a href="small-worlds.html" data-slug="small-worlds">Small worlds</a>
+  <a href="fly-to-location.html" data-slug="fly-to-location">Fly To Location node</a>
+  <a href="stock-navigation.html" data-slug="stock-navigation">Stock Move To and EQS</a>
   <h4>Behaviour Tree patterns</h4>
   <a href="bt-wait.html" data-slug="bt-wait">Wait</a>
   <a href="bt-is-at-location.html" data-slug="bt-is-at-location">Is At Location</a>
@@ -264,8 +268,8 @@ no path probe).</p>
 position to probe. Accepts Vector or Object (Actor location is used in
 the latter case).</li>
 <li><code>bRequireFullResolution</code> - When true (default), only
-fully-resolved chunks (post-T12 promotion) satisfy. When false, any
-loaded chunk does.</li>
+fully-resolved chunks (promoted to full resolution) satisfy. When false,
+any loaded chunk does.</li>
 </ul>
 <h3
 id="lcmbtdecorator_haslineofsight"><code>LcmBTDecorator_HasLineOfSight</code></h3>
@@ -469,14 +473,17 @@ Tree Node</li>
 <li><code>FlightSpeed</code> - Cruise speed of the pawn along the path,
 in cm/s.</li>
 <li><code>QueryOptions</code> - Per-request pathfinding options (solver
-choice, smoothing, heuristic mode). Forwarded as-is into
-<code>FindPathAsync</code>.</li>
+choice, smoothing, heuristic mode, Filter Class, Require Complete Path).
+Forwarded as-is into <code>FindPathAsync</code>. An empty Filter Class
+uses the AI controller's Default Navigation Filter Class.</li>
+<li><code>TimeoutSeconds</code> - Report Failed after this many seconds
+of flight. 0 (default) = no limit.</li>
 <li><code>SeparationRadius</code> - How close is "too close" to another
 agent? (e.g. 150 units)</li>
 <li><code>SeparationWeight</code> - How hard should we push away from
 neighbors? (0.0 = No push, 2.0 = Strong push)</li>
-<li><code>bUseFlightMovementComponent</code> - [P5] Delegate locomotion
-to a ULcmFlightMovementComponent on the pawn (for ultra-realistic 6-DOF
+<li><code>bUseFlightMovementComponent</code> - Delegate locomotion to a
+ULcmFlightMovementComponent on the pawn (for ultra-realistic 6-DOF
 drone/bird/fish dynamics). When ON and the pawn has an enabled
 component, this task only produces the guidance velocity (pure-pursuit +
 avoidance + arrival slowdown) and the component owns position +
@@ -522,13 +529,12 @@ Override at runtime via r.LcmNav.Chase.LeadSecondsCap (&gt;= 0). Typical
 <li><code>DriftReplanCm</code> - Distance (cm) between the last-planned
 goal and the current lead position that triggers an automatic replan.
 Override at runtime via r.LcmNav.Chase.DriftReplanCm (&gt;= 0).</li>
-<li><code>bForceEnableChase</code> - [Fab marketplace UX, 2026-05-29]
-Per-task override for the <code>r.LcmNav.Chase.Enable</code> CVar gate.
-When true, chase activates from <code>bEnableGoalPrediction</code> alone
-- buyers don't need to know the CVar exists. Default false preserves the
-legacy two-gate behavior (CVar AND bEnableGoalPrediction)
-bit-identically. The CVar is retained as a project-wide kill switch /
-debug toggle.</li>
+<li><code>bForceEnableChase</code> - Per-task override for the
+<code>r.LcmNav.Chase.Enable</code> CVar gate. When true, chase activates
+from <code>bEnableGoalPrediction</code> alone - you don't need to know
+the CVar exists. Default false preserves the legacy two-gate behavior
+(CVar AND bEnableGoalPrediction) bit-identically. The CVar is retained
+as a project-wide kill switch / debug toggle.</li>
 </ul>
 <h3
 id="lcmbttask_followflowfield"><code>LcmBTTask_FollowFlowField</code></h3>
@@ -549,16 +555,184 @@ path probe's clearance gate.</li>
 <li><code>MaxDuration</code> - Maximum time (seconds) to follow the path
 before the task fails.</li>
 </ul>
-<h3 id="lcmbttask_land"><code>LcmBTTask_Land</code></h3>
-<p>Task that descends the agent vertically at DescentRate until it
-reaches the TouchDownZ world height, then succeeds.</p>
+<h3 id="lcmbttask_followtarget"><code>LcmBTTask_FollowTarget</code></h3>
+<p>Task that holds a 3D offset from a moving target: escort, wingman,
+overwatch drone. It does not terminate on arrival the way a move task
+does, because the slot it is holding keeps moving.</p>
+<p>The agent matches the target's velocity and corrects the residual
+offset error on top of that, so a follower that is tracking well sits on
+its slot rather than trailing behind it by a fixed lag. The target's
+velocity is measured from its observed motion, so it works for a target
+moved by any means, including one with no movement component.</p>
+<p>The slot is re-checked as the target moves and pulled in toward the
+target if it would otherwise sit inside geometry: a leader hugging a
+wall does not drag its escort into that wall.</p>
 <p><strong>Properties</strong></p>
 <ul>
-<li><code>TouchDownZ</code> - Target world Z height (cm) to descend
-to.</li>
+<li><code>TargetKey</code> - Blackboard key for the target to follow.
+Object = AActor (the useful form), Vector = a fixed point, which reduces
+the node to a hold.</li>
+<li><code>Offset</code> - The slot to hold, in the frame chosen by
+<code>Frame</code>. Default is 400 cm behind and 200 cm above.</li>
+<li><code>Frame</code> - How <code>Offset</code> is interpreted.
+<code>World</code> = fixed world axes, so the slot never rotates.
+<code>Leader Rotation</code> = the offset rotates with the target's
+actor rotation, for a wingman that stays on one wing through a turn.
+<code>Leader Velocity</code> = the offset is built from the target's
+direction of travel, which is the right choice when the target's own
+rotation is not meaningful. The travel frame is held through the
+target's stops rather than collapsing.</li>
+<li><code>MaxSpeedCmS</code> - The follower's own top speed (cm/s). A
+target faster than this will out-run the follower.</li>
+<li><code>CorrectionGain</code> - How hard (1/s) the follower corrects
+offset error on top of matching the target's velocity.</li>
+<li><code>SlotDeadbandCm</code> - Inside this distance the follower
+stops correcting, so a formation settles instead of hunting.</li>
+<li><code>AgentRadiusCm</code> - Agent radius used when checking the
+slot for clearance.</li>
+<li><code>bRequireLineOfSight</code> - Require the slot to see the
+target; a blocked slot is pulled in until it can.</li>
+<li><code>MaxDurationSeconds</code> - Ceiling (seconds) on the escort,
+after which the task <strong>succeeds</strong>. 0 = follow until
+something else stops it.</li>
+<li><code>bSucceedWhenInFormation</code> - Succeed once the slot has
+been held continuously for <code>FormationHoldSeconds</code>. Off by
+default. Useful for a "form up, then advance" sequence.</li>
+<li><code>FormationToleranceCm</code> - How close to the slot counts as
+in formation.</li>
+<li><code>FormationHoldSeconds</code> - How long the slot must be held
+before succeeding.</li>
+<li><code>bUseFlightMovementComponent</code> - Route movement through
+<code>LcmFlightMovementComponent</code> when the pawn has one.</li>
+</ul>
+<h3 id="lcmbttask_hover"><code>LcmBTTask_Hover</code></h3>
+<p>Task that holds a position, optionally facing something, optionally
+for a fixed time.</p>
+<p>Hovering is not the same as commanding zero velocity. A body with
+momentum that is told to stop coasts until drag absorbs it, which for a
+winged agent can be a long way. This task holds a
+<strong>point</strong>, so the agent returns to it.</p>
+<p><strong>Properties</strong></p>
+<ul>
+<li><code>Anchor</code> - <code>Where It Started</code> holds wherever
+the agent was when the task began. <code>Explicit Point</code> holds the
+point named by <code>AnchorKey</code>.</li>
+<li><code>AnchorKey</code> - Blackboard key giving the anchor when
+<code>Anchor</code> is <code>Explicit Point</code>. Vector = world
+location, Object = AActor.</li>
+<li><code>HoverDurationSeconds</code> - How long to hover before
+succeeding. 0 = hover until the parent aborts or a decorator exits.</li>
+<li><code>AgentRadiusCm</code> - Agent radius used when checking an
+authored anchor.</li>
+<li><code>FaceTargetKey</code> - Optional blackboard key to face while
+hovering. Leave unset to hold rotation.</li>
+<li><code>FaceTurnRateDegPerSec</code> - Turn rate (deg/s) used when
+facing.</li>
+<li><code>bUseFlightMovementComponent</code> - Route movement through
+<code>LcmFlightMovementComponent</code> when the pawn has one.</li>
+</ul>
+<h3 id="lcmbttask_land"><code>LcmBTTask_Land</code></h3>
+<p>Task that brings the agent down to a landing point, proving the
+descent corridor is clear as it goes. <code>LandTarget</code> chooses
+how the landing point is found: an authored world height, the surface
+directly below, or a search for a flat enough site nearby.</p>
+<p>If the SVO is not resident under the agent (a streaming gap), the
+task waits rather than failing, because landing in the wrong place is
+worse than pausing.</p>
+<p><strong>Properties</strong></p>
+<ul>
+<li><code>LandTarget</code> - How the touchdown point is chosen.
+<code>Explicit Z</code> descends to the authored
+<code>TouchDownZ</code>. <code>Surface Below</code> traces down and
+lands on whatever is actually there. <code>Landing Site</code> searches
+within <code>SiteSearchRadiusCm</code> for a site no steeper than
+<code>MaxSlopeDegrees</code>.</li>
+<li><code>TouchDownZ</code> - Target world Z height (cm), used when
+<code>LandTarget</code> is <code>Explicit Z</code>.</li>
 <li><code>DescentRate</code> - Vertical descent speed in cm/s.</li>
-<li><code>TouchDownTolerance</code> - Distance (cm) above TouchDownZ at
-which the agent counts as landed.</li>
+<li><code>TouchDownTolerance</code> - Distance (cm) above the touchdown
+point at which the agent counts as landed.</li>
+<li><code>MaxDescentCm</code> - How far down (cm) to look for a surface.
+Beyond this the task reports no surface and fails.</li>
+<li><code>AgentRadiusCm</code> - Agent radius used to size the descent
+corridor test and the site search.</li>
+<li><code>SiteSearchRadiusCm</code> - Radius (cm) searched for a landing
+site when <code>LandTarget</code> is <code>Landing Site</code>.</li>
+<li><code>MaxSlopeDegrees</code> - Steepest surface (degrees from
+horizontal) still accepted as a landing site.</li>
+<li><code>MaxDurationSeconds</code> - Ceiling (seconds) on the whole
+descent. 0 disables. Guards against a descent that never
+progresses.</li>
+<li><code>bUseFlightMovementComponent</code> - Route movement through
+<code>LcmFlightMovementComponent</code> when the pawn has one.</li>
+</ul>
+<h3 id="lcmbttask_lookat"><code>LcmBTTask_LookAt</code></h3>
+<p>Task that rotates the agent to face a target, easing in, and succeeds
+once it is pointing within <code>AcceptableErrorDegrees</code>.</p>
+<p>The alignment test is a true 3D angle, so a target directly above or
+below the agent is handled correctly. See the note under
+<code>LcmBTTask_TurnInPlace</code> for why this matters and when the
+engine's stock rotation task is the better choice.</p>
+<p><strong>Properties</strong></p>
+<ul>
+<li><code>TargetKey</code> - Blackboard key for what to face. Vector =
+world location, Object = AActor.</li>
+<li><code>InterpSpeed</code> - Smoothing rate for the eased turn. Higher
+is faster.</li>
+<li><code>TurnRateDegPerSec</code> - When above 0, turn at this constant
+rate instead of easing. Takes precedence over
+<code>InterpSpeed</code>.</li>
+<li><code>AcceptableErrorDegrees</code> - Angle within which the agent
+counts as facing the target.</li>
+<li><code>MaxDuration</code> - Ceiling (seconds) on the turn.</li>
+<li><code>bFailOnTimeout</code> - When true, reaching
+<code>MaxDuration</code> fails the task. Default false, so a turn that
+runs out of time still succeeds and the tree continues.</li>
+<li><code>bRequireLineOfSight</code> - Require sight of the target.
+During a streaming gap the task waits rather than failing.</li>
+<li><code>bHoldStation</code> - Hold position while turning, so the
+agent does not drift during the turn.</li>
+<li><code>AgentRadiusCm</code> - Agent radius used for the line of sight
+check.</li>
+<li><code>bUseFlightMovementComponent</code> - Route movement through
+<code>LcmFlightMovementComponent</code> when the pawn has one.</li>
+</ul>
+<h3
+id="lcmbttask_movetoandface"><code>LcmBTTask_MoveToAndFace</code></h3>
+<p>Task that moves the agent to a destination and then turns to face
+something once it arrives. The two halves are one task on purpose, so
+the turn is guaranteed to follow the arrival.</p>
+<p>If no separate face target is set, the agent faces its destination.
+This is the "arrive at the perch and look at the door" node.</p>
+<p>It is not a replacement for <code>LcmBTTask_FlyTo</code>: it plans
+one route on entry and follows it. Use <code>FlyTo</code> for long range
+travel with replanning and avoidance, and this for the last leg.</p>
+<p><strong>Properties</strong></p>
+<ul>
+<li><code>MoveTargetKey</code> - Blackboard key for where to move to.
+Vector = world location, Object = AActor.</li>
+<li><code>FaceTargetKey</code> - Blackboard key for what to face on
+arrival. Leave unset to face the destination.</li>
+<li><code>MoveSpeed</code> - Movement speed (cm/s).</li>
+<li><code>ArrivalRadius</code> - Distance (cm) within which the
+destination counts as reached.</li>
+<li><code>bNavigateToTarget</code> - Plan a route to the destination
+instead of moving in a straight line.</li>
+<li><code>MaxMoveSeconds</code> - Ceiling (seconds) on the move half.
+Reaching it fails the task.</li>
+<li><code>FaceAcceptableErrorDegrees</code> - Angle within which the
+agent counts as facing the face target.</li>
+<li><code>FaceTurnRateDegPerSec</code> - Turn rate (deg/s) for the
+facing half.</li>
+<li><code>MaxFaceSeconds</code> - Ceiling (seconds) on the turn.</li>
+<li><code>bFailOnFaceTimeout</code> - When true, a turn that runs out of
+time fails the task. Default false, so the move still counts.</li>
+<li><code>bRequireLineOfSight</code> - Require sight of the face target
+before the turn counts as done.</li>
+<li><code>AgentRadiusCm</code> - Agent radius used for routing and sight
+checks.</li>
+<li><code>bUseFlightMovementComponent</code> - Route movement through
+<code>LcmFlightMovementComponent</code> when the pawn has one.</li>
 </ul>
 <h3 id="lcmbttask_orbittarget"><code>LcmBTTask_OrbitTarget</code></h3>
 <p>Task that circles the agent around a target, holding OrbitRadius
@@ -576,10 +750,29 @@ above); when false, counter-clockwise.</li>
 <li><code>bMatchTargetZ</code> - When true, the agent matches the
 target's world Z height while orbiting; when false, it holds its own
 height.</li>
+<li><code>AgentRadiusCm</code> - Agent radius used when testing each
+step of the orbit for clearance.</li>
+<li><code>MaxDurationSeconds</code> - Ceiling (seconds) on the orbit. 0
+= orbit until something else stops it.</li>
+<li><code>Revolutions</code> - Stop after this many full turns. 0 =
+never stop on revolutions.</li>
+<li><code>bRequireLineOfSight</code> - Require sight of the orbit
+centre. Sight lost for longer than <code>LostPatienceSeconds</code>
+fails the task.</li>
+<li><code>LostPatienceSeconds</code> - How long (seconds) sight of the
+centre may be lost before the task fails.</li>
+<li><code>bUseFlightMovementComponent</code> - Route movement through
+<code>LcmFlightMovementComponent</code> when the pawn has one.</li>
 </ul>
 <h3 id="lcmbttask_patrol"><code>LcmBTTask_Patrol</code></h3>
 <p>Task that moves the agent through a list of waypoints in order,
-pausing at each, optionally looping.</p>
+pausing at each, optionally looping. By default it
+<strong>routes</strong> between waypoints through the navigation data
+rather than flying the straight line, so a patrol whose waypoints are
+separated by geometry follows the building instead of passing through
+it.</p>
+<p>While dwelling at a waypoint the agent holds station, so a body with
+momentum stays on the waypoint rather than drifting off it.</p>
 <p><strong>Properties</strong></p>
 <ul>
 <li><code>Waypoints</code> - Ordered list of patrol waypoints, in world
@@ -592,6 +785,81 @@ counts as reached.</li>
 waypoint before advancing.</li>
 <li><code>bCycle</code> - When true, the patrol loops back to the first
 waypoint after the last; when false, it ends.</li>
+<li><code>bNavigateBetweenWaypoints</code> - Plan a route for each leg
+instead of moving in a straight line. <strong>Defaults on.</strong> When
+no route can be planned (for example the navigation data is not resident
+yet) the leg falls back to the direct line and the next leg is planned
+again, so a patrol never freezes waiting for data.</li>
+<li><code>FaceTravelRateDegPerSec</code> - Turn rate (deg/s) used to
+face the direction of travel. 0 leaves rotation alone.</li>
+<li><code>MaxDurationSeconds</code> - Ceiling (seconds) on the whole
+patrol. 0 = patrol until something else stops it. Worth setting when
+<code>bCycle</code> is on, since a cycling patrol has no natural
+end.</li>
+<li><code>AgentRadiusCm</code> - Agent radius used when planning
+legs.</li>
+<li><code>bUseFlightMovementComponent</code> - Route movement through
+<code>LcmFlightMovementComponent</code> when the pawn has one.</li>
+</ul>
+<h3 id="lcmbttask_takeoff"><code>LcmBTTask_TakeOff</code></h3>
+<p>Task that climbs the agent to a target altitude, proving the air
+above it is clear as it goes.</p>
+<p>The ascent corridor is re-tested while climbing rather than only at
+the start, because a climb that has been stopped by a ceiling and a
+climb that is merely slow look identical from the outside. If the SVO is
+not resident the task waits rather than reporting a blocked climb.</p>
+<p><strong>Properties</strong></p>
+<ul>
+<li><code>TakeOffTarget</code> - <code>Height Above Start</code> climbs
+<code>TargetHeightCm</code> above wherever the agent began, which is the
+natural form for "get off the pad". <code>Absolute Z</code> climbs to
+the world height in <code>TargetZ</code>.</li>
+<li><code>TargetHeightCm</code> - Height (cm) to climb above the start,
+when <code>TakeOffTarget</code> is <code>Height Above Start</code>.</li>
+<li><code>TargetZ</code> - World Z height (cm) to climb to, when
+<code>TakeOffTarget</code> is <code>Absolute Z</code>.</li>
+<li><code>AscentRate</code> - Climb speed in cm/s.</li>
+<li><code>ArrivalTolerance</code> - Distance (cm) below the target
+height at which the climb counts as done.</li>
+<li><code>MaxDurationSeconds</code> - Ceiling (seconds) on the climb. 0
+disables.</li>
+<li><code>AgentRadiusCm</code> - Agent radius used to size the ascent
+corridor test.</li>
+<li><code>bUseFlightMovementComponent</code> - Route movement through
+<code>LcmFlightMovementComponent</code> when the pawn has one.</li>
+</ul>
+<h3 id="lcmbttask_turninplace"><code>LcmBTTask_TurnInPlace</code></h3>
+<p>Task that rotates the agent toward a target at a constant rate,
+without translating, and succeeds once it is pointing within
+<code>AcceptableErrorDegrees</code>.</p>
+<p><strong>Why not the stock
+<code>UBTTask_RotateToFaceBBEntry</code>?</strong> For a walking agent,
+use it. For a flying one, note two things about it. Its success test
+uses a 2D angle that ignores the Z axis entirely, so a target directly
+above the agent reads as already faced. And it applies rotation through
+the AIController focus system, which drops pitch unless the pawn opts in
+with <code>bUseControllerRotationPitch</code>. On a volumetric agent
+that combination means the stock task can report success while pointing
+level at a target overhead. This task measures the real 3D angle and
+applies pitch.</p>
+<p><strong>Properties</strong></p>
+<ul>
+<li><code>TargetKey</code> - Blackboard key for what to face. Vector =
+world location, Object = AActor.</li>
+<li><code>MaxRotationRateDegPerSec</code> - Constant turn rate in
+deg/s.</li>
+<li><code>AcceptableErrorDegrees</code> - Angle within which the agent
+counts as facing the target.</li>
+<li><code>MaxDuration</code> - Ceiling (seconds) on the turn.</li>
+<li><code>bFailOnTimeout</code> - When true, reaching
+<code>MaxDuration</code> fails the task. Default false.</li>
+<li><code>bRequireLineOfSight</code> - Require sight of the target.
+During a streaming gap the task waits rather than failing.</li>
+<li><code>bHoldStation</code> - Hold position while turning.</li>
+<li><code>AgentRadiusCm</code> - Agent radius used for the line of sight
+check.</li>
+<li><code>bUseFlightMovementComponent</code> - Route movement through
+<code>LcmFlightMovementComponent</code> when the pawn has one.</li>
 </ul>
 <h3
 id="lcmdynamicobstaclecomponent"><code>LcmDynamicObstacleComponent</code></h3>
@@ -611,10 +879,9 @@ this mode. Zero CPU cost when the actor is stationary; instant response
 <li><p>POLLING (EventDriven=0) -- legacy behavior: TickComponent at 10
 Hz polls <code>GetActorLocation</code> and fires only when displacement
 exceeds <code>UpdateDistanceThreshold</code> (default 50 cm). Provided
-for ablation / deterministic-test scenarios where event jitter would
-perturb traces.</p></li>
+for deterministic tests where event jitter would perturb
+traces.</p></li>
 </ol>
-<p>§P9.6 in</p>
 <p><strong>Functions</strong></p>
 <ul>
 <li><code>RemoveTrackedComponent</code> - Runtime/BP removal of a
@@ -740,8 +1007,8 @@ path that is measured (cm).</li>
 </ul>
 <h3
 id="envquerytest_lcmthreatexposure"><code>EnvQueryTest_LcmThreatExposure</code></h3>
-<p>Summed §P9.3 SweepPenalty along the item→threat segments. Float
-(lower = safer).</p>
+<p>Summed SweepPenalty along the item→threat segments. Float (lower =
+safer).</p>
 <p><strong>Properties</strong></p>
 <ul>
 <li><code>Context</code> - Threat context whose members the exposure is
@@ -797,8 +1064,8 @@ it was added.</li>
 LocomotionModel + Archetype selectors live at the top of this struct and
 drive which parameters are shown (only the selected model/archetype's
 fields appear).</li>
-<li><code>bBroadcastAnimState</code> - [P6] Each tick, push the flight
-state to the pawn's AnimInstance (and the owner) if it implements
+<li><code>bBroadcastAnimState</code> - Each tick, push the flight state
+to the pawn's AnimInstance (and the owner) if it implements
 ILcmFlightAnimInterface. Default on; costs nothing unless an implementer
 exists.</li>
 <li><code>RigidState</code> - Persistent integrator state, seeded from
@@ -811,6 +1078,37 @@ whether one is active.</li>
 <li><code>bHasGuidance</code> - True when RequestVelocity was called
 since the last tick - gates the dynamics step so an unfed component
 coasts instead of integrating stale guidance.</li>
+</ul>
+<h3
+id="lcmflytolocationasyncaction"><code>LcmFlyToLocationAsyncAction</code></h3>
+<p>The <strong>LCM Fly To Location</strong> latent Blueprint node: flies
+a pawn to a point or an actor through LCM Nav3D and fires On Success or
+On Fail, like AI Move To. No Behavior Tree, StateTree or AI Controller
+needed. Runs the StateTree Fly To task's own code
+(<code>FLcmSTTask_FlyTo::EnterFlight</code> / <code>TickFlight</code> /
+<code>ExitFlight</code>), so the pawn flies exactly as under that task.
+One active request per pawn; a newer one aborts the older. See <a
+href="fly-to-location.html">Tutorial 13</a>.</p>
+<p><strong>Functions</strong></p>
+<ul>
+<li><code>FlyToLocation</code> - Fly a pawn to a location, or to an
+actor (following it if it moves). Inputs: Pawn, Destination, Target
+Actor, Acceptance Radius, and advanced Filter Class, Chase Moving
+Target, Flight Speed, Timeout Seconds.</li>
+<li><code>StopFlyTo</code> - Stop whatever LCM Fly To is flying this
+pawn (On Fail, Aborted). The pawn holds where it is.</li>
+<li><code>IsFlyToActive</code> - True while an LCM Fly To is flying this
+pawn.</li>
+<li><code>Cancel</code> - Cancel this request (On Fail, Aborted).</li>
+</ul>
+<p><strong>Properties</strong></p>
+<ul>
+<li><code>OnSuccess</code> - Arrived. Carries the result
+(<code>Success</code>) and where the pawn was.</li>
+<li><code>OnFail</code> - Did not arrive. Carries the result
+(<code>NoPath</code>, <code>Failed</code>, <code>Aborted</code>,
+<code>TimedOut</code>, <code>InvalidRequest</code>) and where the pawn
+was.</li>
 </ul>
 <h3 id="lcmflyingpawn"><code>LcmFlyingPawn</code></h3>
 <p>Note: APawn already inherits from INavAgentInterface - re-listing it
@@ -854,8 +1152,8 @@ lifetime is not tied to the player's distance from the spawn point
 trap).</p>
 <p><strong>Properties</strong></p>
 <ul>
-<li><code>SpawnBatchPerFrame</code> - [startup smoothing, opt-in] Spawn
-at most N entities per frame instead of the whole crowd in one frame. 0
+<li><code>SpawnBatchPerFrame</code> - Opt-in startup smoothing. Spawn at
+most N entities per frame instead of the whole crowd in one frame. 0
 (default) = stock engine behaviour. A large one-frame spawn (e.g. 6000
 agents) hitches startup ~70 ms; spreading it (e.g. 500) smooths that
 frame-pacing spike. Only applies when "Auto Spawn On Begin Play" is
@@ -1059,10 +1357,10 @@ invalidates the route being followed.</li>
 The LocomotionModel + Archetype selectors are at the top of this struct
 and drive which parameters show; default LocomotionModel = Kinematic →
 the crowd moves exactly as before until you opt in.</li>
-<li><code>FlightDynamicsLODDistance</code> - [P8] Dynamics LOD distance
-(cm): beyond this from the viewer, agents use the cheap kinematic
-integrator (full 6-DOF only near camera) - the scale knob for large
-crowds. 0 = always full. Kill switch: r.LcmNav.Mass.FlightLOD.</li>
+<li><code>FlightDynamicsLODDistance</code> - Dynamics LOD distance (cm):
+beyond this from the viewer, agents use the cheap kinematic integrator
+(full 6-DOF only near camera) - the scale knob for large crowds. 0 =
+always full. Kill switch: r.LcmNav.Mass.FlightLOD.</li>
 <li><code>bAnticipatory</code> - Route around where moving obstacles are
 HEADING (predicted swept volume).</li>
 <li><code>AnticipatoryStrength</code> - Detour strength around predicted
@@ -1104,30 +1402,66 @@ that draws the instanced static mesh at all visible LODs by default (no
 "see nothing" trap), and self-provides the LOD-collector + actor
 fragments so it works as one trait.</p>
 <h3 id="lcmnavareamodifier"><code>LcmNavAreaModifier</code></h3>
-<p>Designer-placed 3D volumetric cost-overlay actor; applies a cost
-multiplier to LCM Nav3D pathfinding wherever the agent's leaf is inside
-its box (water, storm, danger, or preferred-lane volumes that stack
-multiplicatively).</p>
+<p>A cost-area volume (box, sphere or capsule). Every LCM Nav3D planner
+prices routes through it: travel inside costs the area's Default Cost
+times the distance, and each entry pays its Fixed Area Entering Cost. An
+agent's navigation query filter can override either per class, or
+exclude the class. See Tutorial 10.</p>
 <p><strong>Functions</strong></p>
 <ul>
-<li><code>GetCostMultiplier</code> - Returns this volume's cost
-multiplier applied to agents inside the box.</li>
-<li><code>GetBounds</code> - World-space FBox covering the modifier
-volume.</li>
+<li><code>NotifyAreaChanged</code> - Call after changing Area Class,
+Cost Multiplier, Shape, Priority or the box extent at runtime. Moving
+the actor needs no call.</li>
+<li><code>SetAreaVelocity</code> / <code>ClearAreaVelocity</code> /
+<code>GetAreaVelocity</code> - The velocity planners assume for a
+Movable volume. Only needed when it is teleported, or not attached to
+the thing that carries it.</li>
+<li><code>RegisterWithApex</code> - Makes the volume visible to
+planners. BeginPlay calls it when Auto Register is on.</li>
+<li><code>GetCostMultiplier</code> - This volume's own Cost Multiplier
+(ignores Area Class and filters).</li>
+<li><code>GetBounds</code> - World-space box enclosing the volume's
+real, rotated shape.</li>
 </ul>
 <p><strong>Properties</strong></p>
 <ul>
-<li><code>BoundsBox</code> - Box bounds - extents around the actor's
-location. Use the editor gizmo to size the volume.</li>
-<li><code>CostMultiplier</code> - Cost multiplier applied to LCM Nav3D
-pathfinding when the agent is inside the box. 1.0 = no effect; 2.0 =
-costs twice as much; 0.5 = preferred lane. Default 2.0.</li>
-<li><code>bAutoRegisterWithApex</code> - Auto-register with the LCM
-Nav3D extension registry on BeginPlay.</li>
-<li><code>AreaTag</code> - Optional gameplay tag for designer
-categorisation (e.g. "Water", "Storm", "Danger" - not used by solver in
-v1).</li>
+<li><code>AreaClass</code> - Stock NavArea class this volume belongs to.
+Its Default Cost and Fixed Area Entering Cost apply here. Empty = use
+Cost Multiplier on its own.</li>
+<li><code>CostMultiplier</code> - Used only when Area Class is empty.
+1.0 = no effect; 2.0 = twice as dear; 0.5 = preferred lane. Default
+2.0.</li>
+<li><code>Shape</code> - Box, Sphere (radius = extent X) or Capsule
+(along local Z).</li>
+<li><code>Priority</code> - Where volumes overlap, the highest Priority
+decides the cost. An area the agent's filter excludes always wins.</li>
+<li><code>bMovable</code> - Tick when the volume moves. Planners replan
+as it moves, and route caches that depend on static areas alone are
+kept.</li>
+<li><code>PredictionSeconds</code> - For a Movable volume: how far ahead
+agents plan for its motion. Default 1.5 s.</li>
+<li><code>bPatrol</code>, <code>PatrolOffset</code>,
+<code>PatrolSpeed</code> - Move the volume back and forth on its
+own.</li>
+<li><code>BoundsBox</code> - The volume's extent. Use the editor gizmo
+to size it.</li>
+<li><code>bAutoRegisterWithApex</code> - Register on BeginPlay. Default
+on.</li>
+<li><code>AreaTag</code> - Optional designer label.</li>
 </ul>
+<h3
+id="lcmnavarea_storm-_preferredlane-_tollgate-_territory-_restricted-_nofly"><code>LcmNavArea_Storm</code>,
+<code>_PreferredLane</code>, <code>_TollGate</code>,
+<code>_Territory</code>, <code>_Restricted</code>,
+<code>_NoFly</code></h3>
+<p>Ready-made NavArea classes: x5 travel, x0.5 travel, +2000 to enter,
+free until a filter prices it, free until a filter excludes it, and
+impassable for everyone.</p>
+<h3
+id="lcmnavfilter_prey-lcmnavfilter_civilian"><code>LcmNavFilter_Prey</code>,
+<code>LcmNavFilter_Civilian</code></h3>
+<p>Ready-made navigation query filters: Territory x10, and Restricted
+excluded.</p>
 <h3 id="lcmnavareaquerylibrary"><code>LcmNavAreaQueryLibrary</code></h3>
 <p>Blueprint function library exposing the LCM Nav3D nav-extension
 registry so designers can query cost overlays and registered NavLinks
@@ -1138,34 +1472,26 @@ from BP graphs.</p>
 NavLinks.</li>
 <li><code>GetRegisteredAreaCount</code> - Count of currently-registered
 NavArea modifiers.</li>
-<li><code>GetCostMultiplierAt</code> - Cost multiplier at the given
-world position. Returns 1.0 when no modifier applies; multiplies when
-overlapping modifiers stack.</li>
-<li><code>GetCostMultiplierAlongPath</code> - Returns the sum of per-leg
-cost multipliers along the waypoint chain, weighted by leg length.
-Useful for "is this path expensive" predicates without rerunning the
-solver.</li>
+<li><code>GetCostMultiplierAt</code> - Travel multiplier at a world
+position, under each area's own defaults. Returns 1.0 when no area
+applies. Where areas overlap, the highest Priority wins.</li>
+<li><code>GetCostMultiplierAlongPath</code> - The route's
+length-weighted travel multiplier, under each area's own defaults.</li>
+<li><code>GetCostMultiplierAtForFilter</code> - The same at a point, as
+a given navigation query filter sees it. <code>bIsExcluded</code> is
+true when the filter (or a null area) forbids the point.</li>
+<li><code>EvaluatePathCostForFilter</code> - Prices a waypoint chain as
+one agent pays for it: length, length weighted by travel cost, entering
+costs, and whether it crosses an excluded area.</li>
+<li><code>GetPathCostBreakdown</code> - Totals plus one entry per area
+crossed, for a route and a filter.</li>
+<li><code>GetNavLinkTraversalCostAlongPath</code> - The summed
+<code>TraversalCostCm</code> of the NavLinks a route uses.</li>
 <li><code>GetAllLinkEndpoints</code> - All registered link endpoints as
 FVector pairs (Start, End). Useful for debug visualisation.</li>
 <li><code>FindNearestNavLink</code> - Finds the nearest registered
 NavLink to <code>WorldPos</code> within <code>MaxDistanceCm</code>.
 Returns nullptr if none.</li>
-</ul>
-<h3 id="lcmnavarmtaglibrary"><code>LcmNavArmTagLibrary</code></h3>
-<p>Blueprint-callable wrapper around the
-<code>r.LcmAblation.ArmTag</code> CVar so designers can stamp per-task
-arm tags on telemetry rows for in-game A/B analysis without using the
-console.</p>
-<p><strong>Functions</strong></p>
-<ul>
-<li><code>SetArmTag</code> - Sets the current
-<code>r.LcmAblation.ArmTag</code> value. Empty FName clears it.</li>
-<li><code>PushArmTag</code> - Atomically swap the arm tag to
-<code>NewArmTag</code>, returning the previous value. Caller pairs with
-PopArmTag to restore on task exit.</li>
-<li><code>PopArmTag</code> - Restore a previously-pushed arm tag.</li>
-<li><code>GetCurrentArmTag</code> - Reads the current
-<code>r.LcmAblation.ArmTag</code> value. Empty FName when unset.</li>
 </ul>
 <h3 id="lcmnavattributeset"><code>LcmNavAttributeSet</code></h3>
 <p>GAS attribute set surfacing per-agent path-request budgets so
@@ -1209,8 +1535,7 @@ Spawns the four subsystem components
 <code>FLcmMacroGraph</code> + <code>FLcmPortalBuilder</code>; hosts the
 multicast RPCs for dynamic-obstacle invalidation and flow-field-ready
 notifications. Exactly one instance per UWorld; auto-discovered via
-<code>UGameplayStatics:: GetActorOfClass</code>. Full responsibility
-list in §P2.2 of <code>Docs/SYSTEM_ARCHITECTURE.md</code>.</p>
+<code>UGameplayStatics:: GetActorOfClass</code>.</p>
 <p><strong>Functions</strong></p>
 <ul>
 <li><code>UpdateDynamicObstacleReplicated</code>
@@ -1251,7 +1576,18 @@ using shared cache keys.</li>
 <li><code>ForceRedrawSVO</code> - Keep the core function so Blueprints
 can still call it at runtime if needed</li>
 <li><code>FindPath</code> - Calculates a path from Start to End using
-the SVO.</li>
+the SVO. Returns true for a complete route, and also for one that stops
+short of the goal (part of the way not streamed in yet).</li>
+<li><code>FindPathDetailed</code> - Find Path that says what it found:
+Complete, Partial (stops short of the goal; follow it and plan again
+from its end) or Failed.</li>
+<li><code>GetLastPathResult</code> - Complete, Partial or Failed, for
+the last Find Path call.</li>
+<li><code>GetLastPathCostFailure</code> - Why the last Find Path failed,
+if cost areas refused it: Goal In Excluded Area, or No Route Under
+Filter.</li>
+<li><code>SetCostView</code> - Switches the Cost View at runtime (Off,
+Regions, Heat).</li>
 <li><code>FindCover</code> - Find a hidden spot safe from the
 Enemy.</li>
 <li><code>DrawDebugSVO</code> - Visualizes the octree in the viewport
@@ -1370,6 +1706,10 @@ voxel grid when generation finishes.</li>
 Bubbles, the Generation Queue, and loaded chunks in real-time.</li>
 <li><code>bDrawPathfindingDebug</code> - Master switch for Agent Flight
 Paths and Waypoints.</li>
+<li><code>CostView</code> - Draws the cost areas while playing: Regions,
+or Heat (the octree tinted by price).</li>
+<li><code>CostViewFilter</code> - Whose eyes the Cost View looks
+through: a navigation query filter class.</li>
 <li><code>DebugRedrawCoalesceSeconds</code> - Minimum time between
 debug-mesh redraws (coalesce cadence). Forwarded to the SVO debug
 renderer; higher = fewer rebuilds when many obstacles move at once.</li>
@@ -1414,7 +1754,7 @@ traversed Start→End AND End→Start. Set false for one-way patterns
 (teleporter, drop-down, etc.).</li>
 <li><code>bAutoRegisterWithApex</code> - Auto-register with the LCM
 Nav3D link registry on BeginPlay so v2 solver integration discovers the
-link without buyer code.</li>
+link without extra code.</li>
 <li><code>TraversalCostCm</code> - Traversal cost (cm-equivalent) added
 to the path through this link. Default 0 = no penalty (geometric
 distance counts as-is).</li>
@@ -1517,10 +1857,12 @@ cannot.</p>
 <li><code>DwellSeconds</code> - How long the pawn dwells at the perch
 after arrival.</li>
 <li><code>RequiredClearanceCm</code> - Agent collision radius the perch
-must accommodate. Used at claim time by
-<code>FLcmSTTask_UseSmartObject</code> to reject perches whose voxel
-clearance is below this threshold. Pass-through to the JFA clearance
-gate (same byte the Lazy Theta* LOS walker consumes).</li>
+must accommodate. Read at claim time by
+<code>FLcmSTTask_UseSmartObject</code>. <strong>Note:</strong> at
+production chunk sizes the underlying voxel clearance field is not
+populated, so this threshold does not currently reject anything. Treat
+it as authoring intent recorded for future use, not as an active gate,
+and size perches so that any agent you send to them fits.</li>
 <li><code>bUseFacingHint</code> - When true, the pawn rotates to face
 <code>FacingHint</code> after arrival. When false, the pawn keeps its
 inbound flight rotation.</li>
@@ -1582,8 +1924,8 @@ to a blocked SVO leaf (or to no leaf at all - out-of-bounds and unloaded
 chunks both report blocked by default for tactical-query safety). Pair
 with GetSweepPenaltyAt when you need to distinguish "blocked" from
 "merely risky".</li>
-<li><code>GetSweepPenaltyAt</code> - Reads the §P9.3 SweepPenalty byte
-at WorldPos. Higher values indicate the voxel was recently swept by a
+<li><code>GetSweepPenaltyAt</code> - Reads the SweepPenalty byte at
+WorldPos. Higher values indicate the voxel was recently swept by a
 dynamic obstacle's predicted hull - a heuristic measure of "how
 dangerous is this position right now?". Returns 0 when the position
 resolves to a chunk that hasn't been loaded, when the voxel itself is
@@ -1610,7 +1952,6 @@ only need the boolean "is reachable?" answer without the waypoint
 sequence, prefer IsReachableSync (cheaper - bails as soon as goal is
 popped).</li>
 </ul>
-
   <div class="pager"><a href="mass-traits.html">&larr; Mass traits reference</a><span></span></div>
   <footer>
    <p><strong>LCM Nav3D</strong> True Volumetric 3D Navigation for Unreal Engine &nbsp;|&nbsp;

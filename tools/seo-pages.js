@@ -14,6 +14,11 @@ const PAGES = {
     title: 'LCM 3D Navigation AI Docs | 3D Pathfinding for Unreal Engine',
     desc: 'Production-grade volumetric 3D navigation for Unreal Engine 5. Sparse voxel octree pathfinding, GPU voxelization, 10,000+ Mass Entity agents and true-3D EQS.',
   },
+  'whats-new.html': {
+    crumb: "What's New in 3.4.0", section: 'gs', nav: "What's new in 3.4.0",
+    title: "What's New in LCM Nav3D 3.4.0 | Release Notes",
+    desc: 'Release notes for LCM Nav3D 3.4.0 on Unreal Engine 5.2 to 5.8: per-agent cost areas, stock Move To and EQS through the plugin, and packaging fixes.',
+  },
   'nav3d-vs-recast.html': {
     crumb: 'Nav3D vs Recast', section: 'gs', nav: 'Nav3D vs Recast',
     title: 'Nav3D vs Recast Navmesh for Flying AI in Unreal Engine',
@@ -79,14 +84,29 @@ const PAGES = {
     desc: 'Run walking agents on Recast and flying agents on the SVO in one level. The Crowd Avoidance Bridge lets Detour RVO steer Recast agents around LCM Nav3D pawns.',
   },
   'nav-links-and-areas.html': {
-    crumb: 'Nav Links and Area Modifiers', section: 'gf', nav: "Nav links and area modifiers",
-    title: '3D Nav Links and Volumetric Area Modifiers | LCM Nav3D',
-    desc: 'Vertical ladders, jump shafts and teleporters via ULcmNavLinkComponent, plus volumetric cost overlays for water, storms and danger zones via NavArea modifiers.',
+    crumb: 'Cost Areas and NavLinks', section: 'gf', nav: "Cost areas and NavLinks",
+    title: 'Cost Areas and Query Filters for Flying AI | LCM Nav3D',
+    desc: 'Price 3D volumes per agent with stock NavArea classes and Navigation Query Filters: storms, preferred lanes, toll gates, no-fly zones, plus 3D NavLinks.',
   },
   'gameplay-debugger.html': {
     crumb: 'The Gameplay Debugger', section: 'gf', nav: "The Gameplay Debugger",
     title: 'Reading Agent State in the Gameplay Debugger | LCM Nav3D',
     desc: "LCM Nav3D adds its own category to Unreal's stock Gameplay Debugger. Press the debugger key in PIE, pick an agent and read per-agent and plugin-wide state live.",
+  },
+  'small-worlds.html': {
+    crumb: 'Small Worlds', section: 'gf', nav: 'Small worlds',
+    title: 'Centimetre-Scale Small Worlds and 1 cm Voxels | LCM Nav3D',
+    desc: 'Navigate aquariums and other centimetre-scale volumes at a true 1 cm leaf, either at 100:1 or at 1:1 with the Small world-scale profile and scaled agents.',
+  },
+  'fly-to-location.html': {
+    crumb: 'Fly To Location', section: 'gf', nav: "Fly To Location node",
+    title: 'LCM Fly To Location: Move Flying AI From Blueprint | LCM Nav3D',
+    desc: 'One Blueprint node that flies a pawn to a point or actor with no Behavior Tree, StateTree or AI Controller, with success, failure and cancel outputs.',
+  },
+  'stock-navigation.html': {
+    crumb: 'Stock Move To and EQS', section: 'gf', nav: "Stock Move To and EQS",
+    title: 'Use Stock Move To and EQS With Flying AI | LCM Nav3D',
+    desc: "Make Unreal's own Move To, AI Move To and EQS plan through LCM Nav3D: supported agent setup, bridge states and how to check the proxy registered.",
   },
   'bt-wait.html': {
     crumb: 'Wait', section: 'bt', nav: "Wait",
@@ -100,13 +120,13 @@ const PAGES = {
   },
   'bt-look-at.html': {
     crumb: 'Look At', section: 'bt', nav: "Look At",
-    title: 'BT LookAt: Use UBTTask_RotateToFaceBBEntry | LCM Nav3D',
-    desc: "Unreal's stock Rotate to Face BB Entry task covers both LookAt and TurnInPlace for LCM Nav3D agents. Setup, tuning and when a custom rotation task is worth it.",
+    title: 'BT LookAt: Stock Rotate Task vs LCM LookAt | LCM Nav3D',
+    desc: "When Unreal's stock Rotate to Face BB Entry task is right, why it misses targets above or below a flying agent, and when to use the LCM LookAt task.",
   },
   'bt-turn-in-place.html': {
     crumb: 'Turn In Place', section: 'bt', nav: "Turn In Place",
-    title: 'BT TurnInPlace: Stock Rotate + DefaultFocus | LCM Nav3D',
-    desc: "Turn an LCM Nav3D agent in place with Unreal's stock rotation task, and hold facing during other tasks with the DefaultFocus service. Plus constant-rate turns.",
+    title: 'BT TurnInPlace: Constant-Rate 3D Turns | LCM Nav3D',
+    desc: 'Turn a flying LCM Nav3D agent at a constant rate with the LCM TurnInPlace task, or keep facing a target across other tasks with the stock DefaultFocus service.',
   },
   'bt-health-below.html': {
     crumb: 'Health Below', section: 'bt', nav: "Health Below",
@@ -179,13 +199,14 @@ const PAGES = {
 // from this, into every page - so adding a document means adding it here and to
 // PAGES above, and nothing else needs hand-editing.
 const NAV = [
-  { heading: 'Start here', items: ['index.html', 'nav3d-vs-recast.html'] },
+  { heading: 'Start here', items: ['index.html', 'whats-new.html', 'nav3d-vs-recast.html'] },
   { heading: 'Getting started', items: [
     'installation.html', 'core-concepts.html', 'your-first-flying-agent.html',
     'statetree-agent.html', 'dynamic-obstacles.html'] },
   { heading: 'Going further', items: [
     'mass-entity-crowds.html', 'tactical-eqs.html', 'ai-perception.html',
-    'hybrid-recast.html', 'nav-links-and-areas.html', 'gameplay-debugger.html'] },
+    'hybrid-recast.html', 'nav-links-and-areas.html', 'gameplay-debugger.html',
+    'small-worlds.html', 'fly-to-location.html', 'stock-navigation.html'] },
   { heading: 'Behaviour Tree patterns', items: [
     'bt-wait.html', 'bt-is-at-location.html', 'bt-look-at.html', 'bt-turn-in-place.html',
     'bt-health-below.html', 'bt-perception-relay.html', 'bt-memory-decay.html'] },

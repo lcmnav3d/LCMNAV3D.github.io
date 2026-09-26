@@ -2,8 +2,8 @@
 <html lang="en"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BT TurnInPlace: Stock Rotate + DefaultFocus | LCM Nav3D</title>
-<meta name="description" content="Turn an LCM Nav3D agent in place with Unreal's stock rotation task, and hold facing during other tasks with the DefaultFocus service. Plus constant-rate turns.">
+<title>BT TurnInPlace: Constant-Rate 3D Turns | LCM Nav3D</title>
+<meta name="description" content="Turn a flying LCM Nav3D agent at a constant rate with the LCM TurnInPlace task, or keep facing a target across other tasks with the stock DefaultFocus service.">
 <link rel="canonical" href="https://lcmnav3d.github.io/bt-turn-in-place.html">
 <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
 <meta name="author" content="L. Charitha Madhushanka">
@@ -16,16 +16,16 @@
 <meta property="og:site_name" content="LCM Nav3D Documentation">
 <meta property="og:locale" content="en_GB">
 <meta property="og:url" content="https://lcmnav3d.github.io/bt-turn-in-place.html">
-<meta property="og:title" content="BT TurnInPlace: Stock Rotate + DefaultFocus | LCM Nav3D">
-<meta property="og:description" content="Turn an LCM Nav3D agent in place with Unreal's stock rotation task, and hold facing during other tasks with the DefaultFocus service. Plus constant-rate turns.">
+<meta property="og:title" content="BT TurnInPlace: Constant-Rate 3D Turns | LCM Nav3D">
+<meta property="og:description" content="Turn a flying LCM Nav3D agent at a constant rate with the LCM TurnInPlace task, or keep facing a target across other tasks with the stock DefaultFocus service.">
 <meta property="og:image" content="https://lcmnav3d.github.io/og.jpg">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="675">
 <meta property="og:image:alt" content="LCM Nav3D - True Volumetric 3D Navigation for Unreal Engine">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="BT TurnInPlace: Stock Rotate + DefaultFocus | LCM Nav3D">
-<meta name="twitter:description" content="Turn an LCM Nav3D agent in place with Unreal's stock rotation task, and hold facing during other tasks with the DefaultFocus service. Plus constant-rate turns.">
+<meta name="twitter:title" content="BT TurnInPlace: Constant-Rate 3D Turns | LCM Nav3D">
+<meta name="twitter:description" content="Turn a flying LCM Nav3D agent at a constant rate with the LCM TurnInPlace task, or keep facing a target across other tasks with the stock DefaultFocus service.">
 <meta name="twitter:image" content="https://lcmnav3d.github.io/og.jpg">
 <meta name="twitter:image:alt" content="LCM Nav3D - True Volumetric 3D Navigation for Unreal Engine">
 <link rel="icon" href="favicon.png" type="image/png">
@@ -140,9 +140,9 @@
   {
    "@type": "TechArticle",
    "@id": "https://lcmnav3d.github.io/bt-turn-in-place.html#article",
-   "headline": "BT TurnInPlace - use stock UBTTask_RotateToFaceBBEntry + UBTService_DefaultFocus",
-   "name": "BT TurnInPlace: Stock Rotate + DefaultFocus | LCM Nav3D",
-   "description": "Turn an LCM Nav3D agent in place with Unreal's stock rotation task, and hold facing during other tasks with the DefaultFocus service. Plus constant-rate turns.",
+   "headline": "BT TurnInPlace - constant-rate turning, and the stock focus pattern",
+   "name": "BT TurnInPlace: Constant-Rate 3D Turns | LCM Nav3D",
+   "description": "Turn a flying LCM Nav3D agent at a constant rate with the LCM TurnInPlace task, or keep facing a target across other tasks with the stock DefaultFocus service.",
    "url": "https://lcmnav3d.github.io/bt-turn-in-place.html",
    "inLanguage": "en",
    "isPartOf": {
@@ -171,8 +171,8 @@
    "publisher": {
     "@id": "https://lcmnav3d.github.io/#organization"
    },
-   "datePublished": "2026-08-23",
-   "dateModified": "2026-08-23",
+   "datePublished": "2026-09-26",
+   "dateModified": "2026-09-26",
    "proficiencyLevel": "Beginner",
    "dependencies": "Unreal Engine 5.2 to 5.8"
   }
@@ -195,6 +195,7 @@
   <p id="q-status" class="visually-hidden" role="status" aria-live="polite"></p>
   <h4>Start here</h4>
   <a href="index.html" data-slug="index">Overview</a>
+  <a href="whats-new.html" data-slug="whats-new">What's new in 3.4.0</a>
   <a href="nav3d-vs-recast.html" data-slug="nav3d-vs-recast">Nav3D vs Recast</a>
   <h4>Getting started</h4>
   <a href="installation.html" data-slug="installation">Installation</a>
@@ -207,8 +208,11 @@
   <a href="tactical-eqs.html" data-slug="tactical-eqs">Tactical EQS in true 3D</a>
   <a href="ai-perception.html" data-slug="ai-perception">AI perception</a>
   <a href="hybrid-recast.html" data-slug="hybrid-recast">Hybrid Recast + Nav3D</a>
-  <a href="nav-links-and-areas.html" data-slug="nav-links-and-areas">Nav links and area modifiers</a>
+  <a href="nav-links-and-areas.html" data-slug="nav-links-and-areas">Cost areas and NavLinks</a>
   <a href="gameplay-debugger.html" data-slug="gameplay-debugger">The Gameplay Debugger</a>
+  <a href="small-worlds.html" data-slug="small-worlds">Small worlds</a>
+  <a href="fly-to-location.html" data-slug="fly-to-location">Fly To Location node</a>
+  <a href="stock-navigation.html" data-slug="stock-navigation">Stock Move To and EQS</a>
   <h4>Behaviour Tree patterns</h4>
   <a href="bt-wait.html" data-slug="bt-wait">Wait</a>
   <a href="bt-is-at-location.html" data-slug="bt-is-at-location">Is At Location</a>
@@ -227,47 +231,64 @@
  </nav>
  <main id="content">
   <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Documentation</a><span class="sep" aria-hidden="true">/</span><a href="index.html#chapter-12-behaviour-tree-stock-patterns">Behaviour Tree Patterns</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">Turn In Place</span></nav>
-  <h1
-id="bt-turninplace---use-stock-ubttask_rotatetofacebbentry--ubtservice_defaultfocus">BT
-TurnInPlace - use stock <code>UBTTask_RotateToFaceBBEntry</code> +
-<code>UBTService_DefaultFocus</code></h1>
-<p><strong>TL;DR:</strong> Same stock task as LookAt. Combine with
-<code>DefaultFocus</code> service for "keep facing while doing other
-tasks" patterns.</p>
-<h2 id="pattern-simple-turn">Pattern: simple turn</h2>
-<p>Use <code>UBTTask_RotateToFaceBBEntry</code> exactly as in
-<code>BT_LookAt_StockPattern.md</code>. The task completes when the
-agent has rotated to face the BB key.</p>
-<h2 id="pattern-continuous-facing-during-other-tasks">Pattern:
-continuous facing during other tasks</h2>
-<p>If you want the agent to <strong>keep facing a target</strong> while
-executing other tasks in a parent sequence:</p>
+  <h1 id="bt-turninplace---constant-rate-turning-and-the-stock-focus-pattern">BT
+TurnInPlace - constant-rate turning, and the stock focus pattern</h1>
+<p><strong>TL;DR:</strong> For continuous "keep facing while doing other
+things", use the stock <code>UBTService_DefaultFocus</code>. For a discrete
+turn at a constant rate, use <code>LCM_BTTask_TurnInPlace</code>, which
+ships with the plugin.</p>
+<p>See <a href="bt-look-at.html">Look At</a> for the full comparison
+between the stock rotation task and the LCM Nav3D ones. The short version:
+the stock task's success test projects onto the XY plane and its applied
+rotation drops pitch, so on a flying agent with a target overhead it can
+report success while still pointing level.</p>
+<h2 id="pattern-continuous-facing-during-other-tasks">Pattern: continuous
+facing during other tasks</h2>
+<p>If you want the agent to keep facing a target while executing other
+tasks in a parent sequence, this is the stock pattern and LCM Nav3D does
+not replace it:</p>
 <ol type="1">
-<li>Add <code>UBTService_DefaultFocus</code> to the parent
-<strong>Selector</strong> or <strong>Sequence</strong>.</li>
-<li>Set the focus BB key (Vector or Object).</li>
-<li>The AIController's focus stays set for the entire subtree - pawn
-faces the target via <code>SetFocus</code> while other tasks
+<li>Add <code>UBTService_DefaultFocus</code> to the parent Selector or
+Sequence.</li>
+<li>Set the focus blackboard key (Vector or Object).</li>
+<li>The AIController's focus stays set for the entire subtree, so the pawn
+faces the target through <code>SetFocus</code> while other tasks
 execute.</li>
 </ol>
-<p>This is the canonical UE5 pattern for "shoot while strafing" combat
-AI. No LCM Nav3D-specific variant needed.</p>
-<h2 id="why-no-lcm_bttask_turninplace">Why no
-<code>LCM_BTTask_TurnInPlace</code></h2>
-<p>Stock <code>UBTTask_RotateToFaceBBEntry</code> +
-<code>UBTService_DefaultFocus</code> covers the entire use case. The LCM
-Nav3D StateTree <code>FLcmSTTask_TurnInPlace</code> exists because
-StateTree v0.1 doesn't have the equivalent stock task; on BT side it's
-redundant.</p>
-<h2 id="constant-rate-turn-the-original-spec">Constant-rate turn (the
-original spec)</h2>
-<p>If you specifically need <strong>constant angular velocity</strong>
-(not stock's interp-with-acceleration), wrap a small BP-only task: read
-pawn rotation, target rotation, apply
-<code>MaxRotationRate * DeltaTime</code> step toward target. ~10 BP
-nodes. Or use the StateTree variant which supports this directly.</p>
-<p>For the typical "snap-look-at-threat" pattern that AAA combat AI
-uses, stock is the right answer.</p>
+<p>This is the canonical UE pattern for "shoot while strafing" combat
+AI.</p>
+<p>⚠ <strong>A focus service and a rotation task will fight each
+other.</strong> The controller re-asserts focus rotation every tick,
+overwriting anything a task writes, and this has been observed to stall an
+agent outright. Use a focus service for continuous facing
+<strong>or</strong> a rotation task for a discrete turn, not both on the
+same subtree.</p>
+<h2 id="pattern-a-discrete-constant-rate-turn">Pattern: a discrete
+constant-rate turn</h2>
+<p><code>LCM_BTTask_TurnInPlace</code> turns toward the target at
+<code>MaxRotationRateDegPerSec</code> and succeeds once it is pointing
+within <code>AcceptableErrorDegrees</code>.</p>
+<pre><code>Sequence
+  LCM TurnInPlace   (TargetKey = ThreatActor, MaxRotationRateDegPerSec = 180)
+  &lt;your next task&gt;</code></pre>
+<p>Constant rate is the difference from <code>LCM_BTTask_LookAt</code>,
+which eases toward the target instead. Use the constant rate when the turn
+speed is a character trait you want to be visible and consistent, for
+instance a heavy gun platform that traverses slowly. Both tasks share the
+same underlying implementation and the same properties otherwise.</p>
+<p><code>bHoldStation</code> defaults on, so the agent holds its position
+through the turn rather than drifting.</p>
+<h2 id="property-list">Property list</h2>
+<p>See the <a href="api-reference.html#lcmbttask_turninplace">API
+Reference</a> entry for <code>LcmBTTask_TurnInPlace</code>.</p>
+<h2 id="on-6-dof-flight-bodies">On 6-DOF flight bodies</h2>
+<p>Where <code>LcmFlightMovementComponent</code> is driving the pawn with
+the flight dynamics locomotion model, that component owns orientation and
+derives it from its own dynamics. The task reports the facing as
+unsupported rather than pretending, and still succeeds so surrounding
+sequences continue to work. Agents on the default kinematic locomotion
+model rotate normally.</p>
+
 
   <div class="pager"><a href="bt-look-at.html">&larr; Look At</a><a href="bt-health-below.html">Health Below &rarr;</a></div>
   <footer>

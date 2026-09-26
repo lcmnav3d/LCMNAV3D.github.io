@@ -2,9 +2,9 @@
 <html lang="en"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BT LookAt: Stock Rotate Task vs LCM LookAt | LCM Nav3D</title>
-<meta name="description" content="When Unreal's stock Rotate to Face BB Entry task is right, why it misses targets above or below a flying agent, and when to use the LCM LookAt task.">
-<link rel="canonical" href="https://lcmnav3d.github.io/bt-look-at.html">
+<title>Centimetre-Scale Small Worlds and 1 cm Voxels | LCM Nav3D</title>
+<meta name="description" content="Navigate aquariums and other centimetre-scale volumes at a true 1 cm leaf, either at 100:1 or at 1:1 with the Small world-scale profile and scaled agents.">
+<link rel="canonical" href="https://lcmnav3d.github.io/small-worlds.html">
 <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
 <meta name="author" content="L. Charitha Madhushanka">
 <meta name="generator" content="LCM Nav3D docs">
@@ -15,17 +15,17 @@
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="LCM Nav3D Documentation">
 <meta property="og:locale" content="en_GB">
-<meta property="og:url" content="https://lcmnav3d.github.io/bt-look-at.html">
-<meta property="og:title" content="BT LookAt: Stock Rotate Task vs LCM LookAt | LCM Nav3D">
-<meta property="og:description" content="When Unreal's stock Rotate to Face BB Entry task is right, why it misses targets above or below a flying agent, and when to use the LCM LookAt task.">
+<meta property="og:url" content="https://lcmnav3d.github.io/small-worlds.html">
+<meta property="og:title" content="Centimetre-Scale Small Worlds and 1 cm Voxels | LCM Nav3D">
+<meta property="og:description" content="Navigate aquariums and other centimetre-scale volumes at a true 1 cm leaf, either at 100:1 or at 1:1 with the Small world-scale profile and scaled agents.">
 <meta property="og:image" content="https://lcmnav3d.github.io/og.jpg">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="675">
 <meta property="og:image:alt" content="LCM Nav3D - True Volumetric 3D Navigation for Unreal Engine">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="BT LookAt: Stock Rotate Task vs LCM LookAt | LCM Nav3D">
-<meta name="twitter:description" content="When Unreal's stock Rotate to Face BB Entry task is right, why it misses targets above or below a flying agent, and when to use the LCM LookAt task.">
+<meta name="twitter:title" content="Centimetre-Scale Small Worlds and 1 cm Voxels | LCM Nav3D">
+<meta name="twitter:description" content="Navigate aquariums and other centimetre-scale volumes at a true 1 cm leaf, either at 100:1 or at 1:1 with the Small world-scale profile and scaled agents.">
 <meta name="twitter:image" content="https://lcmnav3d.github.io/og.jpg">
 <meta name="twitter:image:alt" content="LCM Nav3D - True Volumetric 3D Navigation for Unreal Engine">
 <link rel="icon" href="favicon.png" type="image/png">
@@ -115,7 +115,7 @@
   },
   {
    "@type": "BreadcrumbList",
-   "@id": "https://lcmnav3d.github.io/bt-look-at.html#breadcrumb",
+   "@id": "https://lcmnav3d.github.io/small-worlds.html#breadcrumb",
    "itemListElement": [
     {
      "@type": "ListItem",
@@ -126,24 +126,24 @@
     {
      "@type": "ListItem",
      "position": 2,
-     "name": "Behaviour Tree Patterns",
-     "item": "https://lcmnav3d.github.io/index.html#chapter-12-behaviour-tree-stock-patterns"
+     "name": "Going Further",
+     "item": "https://lcmnav3d.github.io/index.html#part-ii-going-further"
     },
     {
      "@type": "ListItem",
      "position": 3,
-     "name": "Look At",
-     "item": "https://lcmnav3d.github.io/bt-look-at.html"
+     "name": "Small Worlds",
+     "item": "https://lcmnav3d.github.io/small-worlds.html"
     }
    ]
   },
   {
    "@type": "TechArticle",
-   "@id": "https://lcmnav3d.github.io/bt-look-at.html#article",
-   "headline": "BT LookAt - choosing between the stock task and the LCM Nav3D one",
-   "name": "BT LookAt: Stock Rotate Task vs LCM LookAt | LCM Nav3D",
-   "description": "When Unreal's stock Rotate to Face BB Entry task is right, why it misses targets above or below a flying agent, and when to use the LCM LookAt task.",
-   "url": "https://lcmnav3d.github.io/bt-look-at.html",
+   "@id": "https://lcmnav3d.github.io/small-worlds.html#article",
+   "headline": "Tutorial 12 - Small worlds (centimetre-scale navigation)",
+   "name": "Centimetre-Scale Small Worlds and 1 cm Voxels | LCM Nav3D",
+   "description": "Navigate aquariums and other centimetre-scale volumes at a true 1 cm leaf, either at 100:1 or at 1:1 with the Small world-scale profile and scaled agents.",
+   "url": "https://lcmnav3d.github.io/small-worlds.html",
    "inLanguage": "en",
    "isPartOf": {
     "@id": "https://lcmnav3d.github.io/#website"
@@ -152,11 +152,11 @@
     "@id": "https://lcmnav3d.github.io/#software"
    },
    "breadcrumb": {
-    "@id": "https://lcmnav3d.github.io/bt-look-at.html#breadcrumb"
+    "@id": "https://lcmnav3d.github.io/small-worlds.html#breadcrumb"
    },
    "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://lcmnav3d.github.io/bt-look-at.html"
+    "@id": "https://lcmnav3d.github.io/small-worlds.html"
    },
    "image": {
     "@type": "ImageObject",
@@ -210,13 +210,13 @@
   <a href="hybrid-recast.html" data-slug="hybrid-recast">Hybrid Recast + Nav3D</a>
   <a href="nav-links-and-areas.html" data-slug="nav-links-and-areas">Cost areas and NavLinks</a>
   <a href="gameplay-debugger.html" data-slug="gameplay-debugger">The Gameplay Debugger</a>
-  <a href="small-worlds.html" data-slug="small-worlds">Small worlds</a>
+  <a href="small-worlds.html" data-slug="small-worlds" class="on" aria-current="page">Small worlds</a>
   <a href="fly-to-location.html" data-slug="fly-to-location">Fly To Location node</a>
   <a href="stock-navigation.html" data-slug="stock-navigation">Stock Move To and EQS</a>
   <h4>Behaviour Tree patterns</h4>
   <a href="bt-wait.html" data-slug="bt-wait">Wait</a>
   <a href="bt-is-at-location.html" data-slug="bt-is-at-location">Is At Location</a>
-  <a href="bt-look-at.html" data-slug="bt-look-at" class="on" aria-current="page">Look At</a>
+  <a href="bt-look-at.html" data-slug="bt-look-at">Look At</a>
   <a href="bt-turn-in-place.html" data-slug="bt-turn-in-place">Turn In Place</a>
   <a href="bt-health-below.html" data-slug="bt-health-below">Health Below</a>
   <a href="bt-perception-relay.html" data-slug="bt-perception-relay">Perception Relay</a>
@@ -230,124 +230,128 @@
   <a href="api-reference.html" data-slug="api-reference">API reference</a>
  </nav>
  <main id="content">
-  <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Documentation</a><span class="sep" aria-hidden="true">/</span><a href="index.html#chapter-12-behaviour-tree-stock-patterns">Behaviour Tree Patterns</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">Look At</span></nav>
-  <h1 id="bt-lookat---choosing-between-the-stock-task-and-the-lcm-nav3d-one">BT
-LookAt - choosing between the stock task and the LCM Nav3D one</h1>
-<p><strong>TL;DR:</strong> Unreal Engine ships
-<code>UBTTask_RotateToFaceBBEntry</code>, and for a ground agent it is the
-right answer. For a flying agent it is not, because both its success test
-and its applied rotation ignore the vertical axis. LCM Nav3D now ships
-<code>LCM_BTTask_LookAt</code> and <code>LCM_BTTask_TurnInPlace</code> for
-that case.</p>
-<h2 id="which-one-to-use">Which one to use</h2>
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Documentation</a><span class="sep" aria-hidden="true">/</span><a href="index.html#part-ii-going-further">Going Further</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">Small Worlds</span></nav>
+  <h1 id="tutorial-12---small-worlds-centimetre-scale-navigation">Tutorial
+12 - Small worlds (centimetre-scale navigation)</h1>
+<p><strong>TL;DR:</strong> the plugin voxelizes in Unreal units (1 uu =
+1 cm). A 120 × 70 × 40 cm aquarium with 5 cm cave openings navigates at a
+1 cm leaf either way you build it: at 100:1 on any release, or at 1:1 with
+the <em>World Scale</em> profile set to <em>Small</em>. Both were measured
+on the same test tank.</p>
+<h2 id="the-two-rules-that-are-not-obvious">The two rules that are not
+obvious</h2>
+<ol type="1">
+<li><strong>Set half the leaf you want.</strong> The octree halves a
+half-extent until it drops below <code>Min Voxel Size</code>, so the
+finest leaf lands at 2-4× the value. For a 1 cm leaf set 0.5.</li>
+<li><strong>Make the world edge a power-of-two multiple of the
+leaf.</strong> <code>World Extent</code> is a cube half-extent centred on
+the world origin (the manager actor's location is ignored). With
+<code>World Extent</code> 64 and <code>Min Voxel Size</code> 0.5 the
+halving chain lands exactly on 1 cm; with 60 it lands on 0.94.</li>
+</ol>
+<h2 id="option-a---build-at-1001-works-on-every-release">Option A - build
+at 100:1 (works on every release)</h2>
 <div class="table-wrap" tabindex="0" role="region" aria-label="Table">
 <table>
 <thead>
 <tr>
-<th>Situation</th>
-<th>Use</th>
+<th>Setting</th>
+<th>Real</th>
+<th>In Unreal at 100:1</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Ground agent, target roughly level with it</td>
-<td>Stock <code>UBTTask_RotateToFaceBBEntry</code></td>
+<td>Tank</td>
+<td>120 × 70 × 40 cm</td>
+<td>12000 × 7000 × 4000 uu</td>
 </tr>
 <tr>
-<td>You want facing to persist across several tasks</td>
-<td>Stock task plus <code>UBTService_DefaultFocus</code></td>
+<td>Manager: World Extent</td>
+<td>-</td>
+<td>6400 (finite)</td>
 </tr>
 <tr>
-<td>Target can be above or below the agent</td>
-<td><code>LCM_BTTask_LookAt</code></td>
+<td>Manager: Min Voxel Size</td>
+<td>-</td>
+<td>50</td>
 </tr>
 <tr>
-<td>You need a constant turn rate rather than an eased one</td>
-<td><code>LCM_BTTask_TurnInPlace</code></td>
+<td>Clearance Padding</td>
+<td>fish half-width</td>
+<td>half-width × 100</td>
 </tr>
 <tr>
-<td>You need the turn to hold position while it happens</td>
-<td>Either LCM task, with <code>bHoldStation</code></td>
+<td>Fish speed</td>
+<td>6 cm/s</td>
+<td>600 uu/s (the shipped default)</td>
 </tr>
 </tbody>
 </table>
 </div>
-<h2 id="the-stock-task-and-what-it-does-with-the-vertical-axis">The stock
-task, and what it does with the vertical axis</h2>
-<p>The stock task is well suited to walking agents and integrates with the
-AIController focus system, which is why it is the default recommendation
-in most UE projects. Two details matter once the agent can fly.</p>
-<p><strong>Its success test is two dimensional.</strong> The task measures
-alignment with <code>FVector::CosineAngle2D</code>, which projects both
-directions onto the XY plane before comparing them. A target directly above
-the agent therefore has an angle difference of zero: the task reports
-success immediately, with the agent still pointing level.</p>
-<p><strong>Its applied rotation drops pitch by default.</strong> The task
-rotates the pawn through the controller focus system, and
-<code>APawn::FaceRotation</code> keeps the pawn's existing pitch unless
-<code>bUseControllerRotationPitch</code> is set. On a default pawn that
-flag is false.</p>
-<p>Together those mean that, for a target overhead, the stock task can
-neither point the agent at it nor notice that it has not.</p>
-<p>None of this is a defect in the stock task. It is built for agents that
-move on a surface, where yaw is the only axis that matters.</p>
-<h2 id="the-lcm-nav3d-tasks">The LCM Nav3D tasks</h2>
-<p><code>LCM_BTTask_LookAt</code> eases toward the target;
-<code>LCM_BTTask_TurnInPlace</code> turns at a constant rate. They are
-otherwise the same node with a different rate mode, and both:</p>
+<p>Measured: a 5 cm cave mouth resolved and routed, a plugged cave
+correctly unreachable, an agent crossing the tank in 3 s.</p>
+<h2 id="option-b---build-at-11-with-world-scale--small">Option B - build at
+1:1 with World Scale = Small</h2>
+<p>Set <code>World Scale</code> to <code>Small</code>,
+<code>World Extent</code> to 64, <code>Min Voxel Size</code> to 0.5.
+Clearance Padding is derived for you (half the leaf); the start-rescue
+distances and the large-node cost threshold scale with the leaf as well.
+The Details panel will note that the world is only 128 leaves across -
+that is expected for a small world, not a fault. The line-of-sight sampler,
+the neighbour probe and the route executor's sampling floors follow the
+leaf on their own, on every profile.</p>
+<p>Agents follow too. The <strong>Fly To</strong> task (BT and StateTree)
+and the flight movement component carry an <code>Agent Scale</code> that
+defaults to <code>0</code> = follow the manager's World Scale, so under
+<code>Small</code> a fish authored with the shipped drone values
+(600 cm/s, 100 cm acceptance, 120 cm agent size) flies at 6 cm/s with a
+1 cm acceptance and a 1.2 cm agent size, along the same path shape, in the
+same time. Scale the pawn actor itself (mesh and collision) to match - the
+plugin scales motion, not geometry. Set <code>Agent Scale</code>
+explicitly on a task when an agent should not follow the world (a large
+creature in a small world, or the reverse).</p>
+<p>One engine-side limit remains for very small bodies: Unreal's swept
+movement pulls every blocking hit back by an absolute 0.1-1 cm and treats
+gaps inside the physics contact offset (2 cm minimum) as an initial
+overlap, so a body whose collision is itself a centimetre or less meets a
+wall under a different regime than its metre-scale twin. Measured with the
+bird pawn at agent scale 0.01: the flight is identical to the 100:1 flight
+until the first wall contact (and, on this tank, arrives sooner after it).
+Bodies that keep clear of walls, such as the navigator drones, are exact
+end to end. If wall-hugging behaviour must match a metre-scale reference
+exactly, build at 10:1 (agent scale 0.1), where the engine tolerances are
+still small against the body.</p>
+<h2 id="stones-with-caves-collision-not-the-mesh">Stones with caves:
+collision, not the mesh</h2>
+<p>Solidity is read from <strong>collision</strong>. Set stone meshes to
+<em>Use Complex Collision As Simple</em>; a convex hull or box spanning a
+cave mouth is solid as far as the plugin is concerned, however fine the
+leaf. (Measured: the same tank with the stones' collision removed routes
+straight through them; with complex-as-simple it is byte-identical to the
+baseline.)</p>
+<h2 id="what-to-expect-at-small-scale">What to expect at small scale</h2>
 <ul>
-<li>measure the real 3D angle between the agent's forward vector and the
-target direction, so a pure pitch error reads as a pitch error;</li>
-<li>apply pitch as well as yaw;</li>
-<li>optionally hold position during the turn (<code>bHoldStation</code>),
-so a body with momentum does not drift while it rotates;</li>
-<li>optionally require line of sight, and <strong>wait</strong> rather than
-fail while navigation data is still streaming in.</li>
-</ul>
-<p>Property lists are in the <a
-href="api-reference.html#lcmbttask_lookat">API Reference</a>.</p>
-<h2 id="pattern-face-a-target-then-act">Pattern: face a target, then
-act</h2>
-<pre><code>Sequence
-  LCM LookAt        (TargetKey = ThreatActor)
-  &lt;your attack task&gt;</code></pre>
-<p><code>bFailOnTimeout</code> defaults to false, so a turn that runs out
-of time still succeeds and the sequence continues. Set it true if a failed
-turn should abort the sequence.</p>
-<h2 id="pattern-keep-facing-while-doing-other-things">Pattern: keep facing
-while doing other things</h2>
-<p>This is still the stock pattern and LCM Nav3D does not replace it:</p>
-<ol type="1">
-<li>Add <code>UBTService_DefaultFocus</code> to the parent Selector or
-Sequence.</li>
-<li>Set its focus blackboard key.</li>
-<li>The controller holds focus for the whole subtree.</li>
-</ol>
-<p>⚠ <strong>Do not run a focus service and a rotation task at the same
-time.</strong> The AIController re-asserts focus rotation every tick, so
-it will fight any task that writes rotation itself, including the LCM
-tasks. Pick one: a focus service for continuous facing, or a rotation task
-for a discrete turn. Running both has been observed to stall the agent
-outright.</p>
-<h2 id="on-6-dof-flight-bodies">On 6-DOF flight bodies</h2>
-<p>If the pawn carries <code>LcmFlightMovementComponent</code> with the
-flight dynamics locomotion model, that component owns the body's
-orientation and derives it from its own dynamics every tick. A rotation
-written by any task, stock or LCM, is overwritten in the same frame.</p>
-<p>The LCM tasks detect this and report the facing as unsupported rather
-than pretending to have turned; the task still succeeds so that a sequence
-containing it continues to work. Agents using the default kinematic
-locomotion model are unaffected and rotate normally.</p>
-<h2 id="see-also">See also</h2>
-<ul>
-<li><code>LCM_BTTask_MoveToAndFace</code> - travel to a point and turn to
-face something on arrival, as one task.</li>
-<li><code>LCM_BTTask_Hover</code> - hold position while facing a target,
-for a fixed time or indefinitely.</li>
+<li><strong>Cost trends volumetric.</strong> In a world a few dozen leaves
+across nothing is far from geometry <em>in leaves</em>, so the octree
+cannot stay coarse anywhere; node count grew 7.3-7.9× per halving of the
+leaf on the test tank. The voxel budget (64 M cells per volume) still
+applies.</li>
+<li><strong>Unreachable goals are cheap.</strong> Free-space components
+are labelled at build time, so a goal behind sealed stone fails before any
+search runs.</li>
+<li><strong>Bakes land in the plugin folder.</strong>
+<code>Bake to Asset</code> writes under <code>/LCMNav3D/BakedData/</code>
+even for a map in your project. Remove test bakes before packaging; the
+manager logs a warning when it bakes a map that lives outside the
+plugin.</li>
+<li><strong>Infinite mode is not for this.</strong> Its per-chunk budget
+forces <code>Chunk Size ≤ 400 × Min Voxel Size</code>; the panel says so if
+you try.</li>
 </ul>
 
-
-  <div class="pager"><a href="bt-is-at-location.html">&larr; Is At Location</a><a href="bt-turn-in-place.html">Turn In Place &rarr;</a></div>
+  <div class="pager"><a href="gameplay-debugger.html">&larr; The Gameplay Debugger</a><a href="fly-to-location.html">Fly To Location node &rarr;</a></div>
   <footer>
    <p><strong>LCM Nav3D</strong> True Volumetric 3D Navigation for Unreal Engine &nbsp;|&nbsp;
     <a href="https://www.fab.com/listings/92f05e42-d7be-4de3-abe8-7b0a3e70ba73">Fab</a> &nbsp;|&nbsp;

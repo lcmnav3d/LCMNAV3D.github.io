@@ -132,8 +132,8 @@
     "width": 1200,
     "height": 675
    },
-   "datePublished": "2026-08-23",
-   "dateModified": "2026-08-23"
+   "datePublished": "2026-09-26",
+   "dateModified": "2026-09-26"
   }
  ]
 }
@@ -154,6 +154,7 @@
   <p id="q-status" class="visually-hidden" role="status" aria-live="polite"></p>
   <h4>Start here</h4>
   <a href="index.html" data-slug="index" class="on" aria-current="page">Overview</a>
+  <a href="whats-new.html" data-slug="whats-new">What's new in 3.4.0</a>
   <a href="nav3d-vs-recast.html" data-slug="nav3d-vs-recast">Nav3D vs Recast</a>
   <h4>Getting started</h4>
   <a href="installation.html" data-slug="installation">Installation</a>
@@ -166,8 +167,11 @@
   <a href="tactical-eqs.html" data-slug="tactical-eqs">Tactical EQS in true 3D</a>
   <a href="ai-perception.html" data-slug="ai-perception">AI perception</a>
   <a href="hybrid-recast.html" data-slug="hybrid-recast">Hybrid Recast + Nav3D</a>
-  <a href="nav-links-and-areas.html" data-slug="nav-links-and-areas">Nav links and area modifiers</a>
+  <a href="nav-links-and-areas.html" data-slug="nav-links-and-areas">Cost areas and NavLinks</a>
   <a href="gameplay-debugger.html" data-slug="gameplay-debugger">The Gameplay Debugger</a>
+  <a href="small-worlds.html" data-slug="small-worlds">Small worlds</a>
+  <a href="fly-to-location.html" data-slug="fly-to-location">Fly To Location node</a>
+  <a href="stock-navigation.html" data-slug="stock-navigation">Stock Move To and EQS</a>
   <h4>Behaviour Tree patterns</h4>
   <a href="bt-wait.html" data-slug="bt-wait">Wait</a>
   <a href="bt-is-at-location.html" data-slug="bt-is-at-location">Is At Location</a>
@@ -225,6 +229,10 @@ degrades gracefully instead of failing. A GPU path solver is experimental,
 currently in research validation, and ships in a future free update</td>
 </tr>
 <tr>
+<td><strong>Per-agent cost areas</strong></td>
+<td>Storms, preferred lanes, toll gates and no-fly zones as volumes with stock NavArea classes. Every planner prices routes through them, and a stock Navigation Query Filter lets two agents read the same volume differently. See <a href="nav-links-and-areas.html">Cost areas</a></td>
+</tr>
+<tr>
 <td><strong>Crowd scale</strong></td>
 <td>10,000+ agents through the Mass Entity ECS with LOD-culled rendering, where a
 UActor AI agent costs roughly 50 µs/tick once it has a controller, movement
@@ -271,6 +279,10 @@ Linux. Every claim above is documented in the chapter it belongs to - start with
 <a href="nav3d-vs-recast.html">Nav3D vs Recast</a> if you are deciding whether you
 need volumetric navigation at all.</p>
 <h2 id="start-here">Start here</h2>
+<p><strong>New in 3.3.0:</strong> a rebuilt agent task library,
+centimetre-scale small worlds, automatic rebuilds for streamed-in levels and
+a round of voxelization fixes. See
+<a href="whats-new.html">What's new in 3.3.0</a>.</p>
 <p><strong>→ <a
 href="pdf/LCM_Nav3D_QuickStart.pdf">LCM_Nav3D_QuickStart.pdf</a>
 - 13 pages.</strong> Install it, understand the five settings that
@@ -304,7 +316,7 @@ href="pdf/LCM_Nav3D_QuickStart.pdf">LCM_Nav3D_QuickStart.pdf</a></td>
 <td><a
 href="pdf/LCM_Nav3D_Manual.pdf">LCM_Nav3D_Manual.pdf</a>
 - everything, bookmarked and searchable</td>
-<td>127 pp</td>
+<td>136 pp</td>
 </tr>
 </tbody>
 </table>
@@ -486,6 +498,12 @@ Modifiers</a></td>
 <td><a href="gameplay-debugger.html">The Gameplay Debugger</a></td>
 <td>Reading agent and plugin state live in PIE</td>
 </tr>
+<tr>
+<td>12</td>
+<td><a href="small-worlds.html">Small Worlds</a></td>
+<td>A true 1 cm leaf for aquariums and other centimetre-scale volumes, at
+100:1 or with the Small world-scale profile</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -596,7 +614,7 @@ and Mass Entity. <code>Content/Demo/MainMenu</code> is a gallery that
 opens any of them. Enable <strong>Show Plugin Content</strong> in the
 Content Browser to see them.</p>
 
-  <div class="pager"><span></span><a href="nav3d-vs-recast.html">Nav3D vs Recast &rarr;</a></div>
+  <div class="pager"><span></span><a href="whats-new.html">What's new in 3.4.0 &rarr;</a></div>
   <footer>
    <p><strong>LCM Nav3D</strong> True Volumetric 3D Navigation for Unreal Engine &nbsp;|&nbsp;
     <a href="https://www.fab.com/listings/92f05e42-d7be-4de3-abe8-7b0a3e70ba73">Fab</a> &nbsp;|&nbsp;

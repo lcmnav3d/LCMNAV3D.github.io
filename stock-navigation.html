@@ -2,9 +2,9 @@
 <html lang="en"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BT LookAt: Stock Rotate Task vs LCM LookAt | LCM Nav3D</title>
-<meta name="description" content="When Unreal's stock Rotate to Face BB Entry task is right, why it misses targets above or below a flying agent, and when to use the LCM LookAt task.">
-<link rel="canonical" href="https://lcmnav3d.github.io/bt-look-at.html">
+<title>Use Stock Move To and EQS With Flying AI | LCM Nav3D</title>
+<meta name="description" content="Make Unreal's own Move To, AI Move To and EQS plan through LCM Nav3D: supported agent setup, bridge states and how to check the proxy registered.">
+<link rel="canonical" href="https://lcmnav3d.github.io/stock-navigation.html">
 <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
 <meta name="author" content="L. Charitha Madhushanka">
 <meta name="generator" content="LCM Nav3D docs">
@@ -15,17 +15,17 @@
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="LCM Nav3D Documentation">
 <meta property="og:locale" content="en_GB">
-<meta property="og:url" content="https://lcmnav3d.github.io/bt-look-at.html">
-<meta property="og:title" content="BT LookAt: Stock Rotate Task vs LCM LookAt | LCM Nav3D">
-<meta property="og:description" content="When Unreal's stock Rotate to Face BB Entry task is right, why it misses targets above or below a flying agent, and when to use the LCM LookAt task.">
+<meta property="og:url" content="https://lcmnav3d.github.io/stock-navigation.html">
+<meta property="og:title" content="Use Stock Move To and EQS With Flying AI | LCM Nav3D">
+<meta property="og:description" content="Make Unreal's own Move To, AI Move To and EQS plan through LCM Nav3D: supported agent setup, bridge states and how to check the proxy registered.">
 <meta property="og:image" content="https://lcmnav3d.github.io/og.jpg">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="675">
 <meta property="og:image:alt" content="LCM Nav3D - True Volumetric 3D Navigation for Unreal Engine">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="BT LookAt: Stock Rotate Task vs LCM LookAt | LCM Nav3D">
-<meta name="twitter:description" content="When Unreal's stock Rotate to Face BB Entry task is right, why it misses targets above or below a flying agent, and when to use the LCM LookAt task.">
+<meta name="twitter:title" content="Use Stock Move To and EQS With Flying AI | LCM Nav3D">
+<meta name="twitter:description" content="Make Unreal's own Move To, AI Move To and EQS plan through LCM Nav3D: supported agent setup, bridge states and how to check the proxy registered.">
 <meta name="twitter:image" content="https://lcmnav3d.github.io/og.jpg">
 <meta name="twitter:image:alt" content="LCM Nav3D - True Volumetric 3D Navigation for Unreal Engine">
 <link rel="icon" href="favicon.png" type="image/png">
@@ -115,7 +115,7 @@
   },
   {
    "@type": "BreadcrumbList",
-   "@id": "https://lcmnav3d.github.io/bt-look-at.html#breadcrumb",
+   "@id": "https://lcmnav3d.github.io/stock-navigation.html#breadcrumb",
    "itemListElement": [
     {
      "@type": "ListItem",
@@ -126,24 +126,24 @@
     {
      "@type": "ListItem",
      "position": 2,
-     "name": "Behaviour Tree Patterns",
-     "item": "https://lcmnav3d.github.io/index.html#chapter-12-behaviour-tree-stock-patterns"
+     "name": "Going Further",
+     "item": "https://lcmnav3d.github.io/index.html#part-ii-going-further"
     },
     {
      "@type": "ListItem",
      "position": 3,
-     "name": "Look At",
-     "item": "https://lcmnav3d.github.io/bt-look-at.html"
+     "name": "Stock Move To and EQS",
+     "item": "https://lcmnav3d.github.io/stock-navigation.html"
     }
    ]
   },
   {
    "@type": "TechArticle",
-   "@id": "https://lcmnav3d.github.io/bt-look-at.html#article",
-   "headline": "BT LookAt - choosing between the stock task and the LCM Nav3D one",
-   "name": "BT LookAt: Stock Rotate Task vs LCM LookAt | LCM Nav3D",
-   "description": "When Unreal's stock Rotate to Face BB Entry task is right, why it misses targets above or below a flying agent, and when to use the LCM LookAt task.",
-   "url": "https://lcmnav3d.github.io/bt-look-at.html",
+   "@id": "https://lcmnav3d.github.io/stock-navigation.html#article",
+   "headline": "Tutorial 14 - Stock Move To and EQS with LCM Nav3D",
+   "name": "Use Stock Move To and EQS With Flying AI | LCM Nav3D",
+   "description": "Make Unreal's own Move To, AI Move To and EQS plan through LCM Nav3D: supported agent setup, bridge states and how to check the proxy registered.",
+   "url": "https://lcmnav3d.github.io/stock-navigation.html",
    "inLanguage": "en",
    "isPartOf": {
     "@id": "https://lcmnav3d.github.io/#website"
@@ -152,11 +152,11 @@
     "@id": "https://lcmnav3d.github.io/#software"
    },
    "breadcrumb": {
-    "@id": "https://lcmnav3d.github.io/bt-look-at.html#breadcrumb"
+    "@id": "https://lcmnav3d.github.io/stock-navigation.html#breadcrumb"
    },
    "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://lcmnav3d.github.io/bt-look-at.html"
+    "@id": "https://lcmnav3d.github.io/stock-navigation.html"
    },
    "image": {
     "@type": "ImageObject",
@@ -212,11 +212,11 @@
   <a href="gameplay-debugger.html" data-slug="gameplay-debugger">The Gameplay Debugger</a>
   <a href="small-worlds.html" data-slug="small-worlds">Small worlds</a>
   <a href="fly-to-location.html" data-slug="fly-to-location">Fly To Location node</a>
-  <a href="stock-navigation.html" data-slug="stock-navigation">Stock Move To and EQS</a>
+  <a href="stock-navigation.html" data-slug="stock-navigation" class="on" aria-current="page">Stock Move To and EQS</a>
   <h4>Behaviour Tree patterns</h4>
   <a href="bt-wait.html" data-slug="bt-wait">Wait</a>
   <a href="bt-is-at-location.html" data-slug="bt-is-at-location">Is At Location</a>
-  <a href="bt-look-at.html" data-slug="bt-look-at" class="on" aria-current="page">Look At</a>
+  <a href="bt-look-at.html" data-slug="bt-look-at">Look At</a>
   <a href="bt-turn-in-place.html" data-slug="bt-turn-in-place">Turn In Place</a>
   <a href="bt-health-below.html" data-slug="bt-health-below">Health Below</a>
   <a href="bt-perception-relay.html" data-slug="bt-perception-relay">Perception Relay</a>
@@ -230,124 +230,130 @@
   <a href="api-reference.html" data-slug="api-reference">API reference</a>
  </nav>
  <main id="content">
-  <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Documentation</a><span class="sep" aria-hidden="true">/</span><a href="index.html#chapter-12-behaviour-tree-stock-patterns">Behaviour Tree Patterns</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">Look At</span></nav>
-  <h1 id="bt-lookat---choosing-between-the-stock-task-and-the-lcm-nav3d-one">BT
-LookAt - choosing between the stock task and the LCM Nav3D one</h1>
-<p><strong>TL;DR:</strong> Unreal Engine ships
-<code>UBTTask_RotateToFaceBBEntry</code>, and for a ground agent it is the
-right answer. For a flying agent it is not, because both its success test
-and its applied rotation ignore the vertical axis. LCM Nav3D now ships
-<code>LCM_BTTask_LookAt</code> and <code>LCM_BTTask_TurnInPlace</code> for
-that case.</p>
-<h2 id="which-one-to-use">Which one to use</h2>
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Documentation</a><span class="sep" aria-hidden="true">/</span><a href="index.html#part-ii-going-further">Going Further</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">Stock Move To and EQS</span></nav>
+  <h1 id="tutorial-14---stock-move-to-and-eqs-with-lcm-nav3d">Tutorial 14
+- Stock Move To and EQS with LCM Nav3D</h1>
+<blockquote>
+<p>Goal: make UE's own navigation nodes (<strong>Move To</strong>,
+<strong>AI Move To</strong>, <strong>Simple Move To</strong>,
+<strong>Find Path To Location Synchronously</strong>, EQS projection)
+plan through LCM Nav3D, and check that they do.</p>
+</blockquote>
+<hr />
+<h2 id="how-it-works">How it works</h2>
+<p>When a level has an <strong>LCM Nav3D Manager</strong>, the plugin
+spawns a navigation-data proxy (<code>LcmNavigationDataProxy</code>). It
+then asks UE's navigation system to register the proxy. Once registered,
+stock queries for the proxy's agent go through LCM Nav3D, and LCM Nav3D
+plans them in 3D.</p>
+<p>UE registers a navigation-data actor only for a <strong>Supported
+Agent</strong> whose <strong>Navigation Data Class</strong> is that
+actor's class. The plugin picks that agent for you where it can, and
+reports what really happened. (Before 3.4 the proxy was refused on every
+map while the log said "registered".)</p>
+<h2 id="step-1-pick-your-setup">Step 1: pick your setup</h2>
 <div class="table-wrap" tabindex="0" role="region" aria-label="Table">
 <table>
 <thead>
 <tr>
-<th>Situation</th>
-<th>Use</th>
+<th>Your project</th>
+<th>What to do</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Ground agent, target roughly level with it</td>
-<td>Stock <code>UBTTask_RotateToFaceBBEntry</code></td>
+<td>Only flying agents; no Recast navmesh in the level</td>
+<td><strong>Nothing.</strong> The proxy claims the default agent on this
+world's navigation system
+(<code>r.LcmNav.Bridge.ClaimDefaultAgent 1</code>, the default). Project
+Settings are never written.</td>
 </tr>
 <tr>
-<td>You want facing to persist across several tasks</td>
-<td>Stock task plus <code>UBTService_DefaultFocus</code></td>
+<td>Flying agents <strong>and</strong> ground characters on a Recast
+navmesh</td>
+<td>Add a Supported Agent for LCM Nav3D (Step 2). The navmesh keeps the
+default agent.</td>
 </tr>
 <tr>
-<td>Target can be above or below the agent</td>
-<td><code>LCM_BTTask_LookAt</code></td>
-</tr>
-<tr>
-<td>You need a constant turn rate rather than an eased one</td>
-<td><code>LCM_BTTask_TurnInPlace</code></td>
-</tr>
-<tr>
-<td>You need the turn to hold position while it happens</td>
-<td>Either LCM task, with <code>bHoldStation</code></td>
+<td>You want the stock nodes to ignore LCM Nav3D</td>
+<td><code>r.LcmNav.Bridge.AutoRegister 0</code>.</td>
 </tr>
 </tbody>
 </table>
 </div>
-<h2 id="the-stock-task-and-what-it-does-with-the-vertical-axis">The stock
-task, and what it does with the vertical axis</h2>
-<p>The stock task is well suited to walking agents and integrates with the
-AIController focus system, which is why it is the default recommendation
-in most UE projects. Two details matter once the agent can fly.</p>
-<p><strong>Its success test is two dimensional.</strong> The task measures
-alignment with <code>FVector::CosineAngle2D</code>, which projects both
-directions onto the XY plane before comparing them. A target directly above
-the agent therefore has an angle difference of zero: the task reports
-success immediately, with the agent still pointing level.</p>
-<p><strong>Its applied rotation drops pitch by default.</strong> The task
-rotates the pawn through the controller focus system, and
-<code>APawn::FaceRotation</code> keeps the pawn's existing pitch unless
-<code>bUseControllerRotationPitch</code> is set. On a default pawn that
-flag is false.</p>
-<p>Together those mean that, for a target overhead, the stock task can
-neither point the agent at it nor notice that it has not.</p>
-<p>None of this is a defect in the stock task. It is built for agents that
-move on a surface, where yaw is the only axis that matters.</p>
-<h2 id="the-lcm-nav3d-tasks">The LCM Nav3D tasks</h2>
-<p><code>LCM_BTTask_LookAt</code> eases toward the target;
-<code>LCM_BTTask_TurnInPlace</code> turns at a constant rate. They are
-otherwise the same node with a different rate mode, and both:</p>
-<ul>
-<li>measure the real 3D angle between the agent's forward vector and the
-target direction, so a pure pitch error reads as a pitch error;</li>
-<li>apply pitch as well as yaw;</li>
-<li>optionally hold position during the turn (<code>bHoldStation</code>),
-so a body with momentum does not drift while it rotates;</li>
-<li>optionally require line of sight, and <strong>wait</strong> rather than
-fail while navigation data is still streaming in.</li>
-</ul>
-<p>Property lists are in the <a
-href="api-reference.html#lcmbttask_lookat">API Reference</a>.</p>
-<h2 id="pattern-face-a-target-then-act">Pattern: face a target, then
-act</h2>
-<pre><code>Sequence
-  LCM LookAt        (TargetKey = ThreatActor)
-  &lt;your attack task&gt;</code></pre>
-<p><code>bFailOnTimeout</code> defaults to false, so a turn that runs out
-of time still succeeds and the sequence continues. Set it true if a failed
-turn should abort the sequence.</p>
-<h2 id="pattern-keep-facing-while-doing-other-things">Pattern: keep facing
-while doing other things</h2>
-<p>This is still the stock pattern and LCM Nav3D does not replace it:</p>
+<h2 id="step-2-add-a-supported-agent-mixed-projects-only">Step 2: add a
+Supported Agent (mixed projects only)</h2>
 <ol type="1">
-<li>Add <code>UBTService_DefaultFocus</code> to the parent Selector or
-Sequence.</li>
-<li>Set its focus blackboard key.</li>
-<li>The controller holds focus for the whole subtree.</li>
+<li><strong>Project Settings → Engine → Navigation System → Agents →
+Supported Agents → +</strong>.</li>
+<li><strong>Name:</strong> anything, e.g. <code>Flyer</code>.</li>
+<li><strong>Navigation Data Class:</strong>
+<code>LcmNavigationDataProxy</code>.</li>
+<li><strong>Agent Radius / Height:</strong> your flyer's size. UE uses
+them to pick the agent for a pawn, so make them differ from the ground
+agent's.</li>
+<li>On the flying pawn's <strong>Character/Pawn Movement → Nav Agent
+Properties</strong>, use the same radius and height, or set
+<strong>Preferred Nav Data</strong> to
+<code>LcmNavigationDataProxy</code>.</li>
 </ol>
-<p>⚠ <strong>Do not run a focus service and a rotation task at the same
-time.</strong> The AIController re-asserts focus rotation every tick, so
-it will fight any task that writes rotation itself, including the LCM
-tasks. Pick one: a focus service for continuous facing, or a rotation task
-for a discrete turn. Running both has been observed to stall the agent
-outright.</p>
-<h2 id="on-6-dof-flight-bodies">On 6-DOF flight bodies</h2>
-<p>If the pawn carries <code>LcmFlightMovementComponent</code> with the
-flight dynamics locomotion model, that component owns the body's
-orientation and derives it from its own dynamics every tick. A rotation
-written by any task, stock or LCM, is overwritten in the same frame.</p>
-<p>The LCM tasks detect this and report the facing as unsupported rather
-than pretending to have turned; the task still succeeds so that a sequence
-containing it continues to work. Agents using the default kinematic
-locomotion model are unaffected and rotate normally.</p>
-<h2 id="see-also">See also</h2>
+<h2 id="step-3-check-it-worked">Step 3: check it worked</h2>
+<p>The bridge reports one of these states, in the log and from Blueprint
+or C++ (<code>ULcmNavBridgeSubsystem::GetBridgeState()</code> /
+<code>GetBridgeStatusText()</code>):</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Table">
+<table>
+<thead>
+<tr>
+<th>State</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Registered</code></td>
+<td>Stock queries for the bridged agent go through LCM Nav3D.</td>
+</tr>
+<tr>
+<td><code>NotClaimed</code></td>
+<td>Another navigation data (a Recast navmesh) owns the default agent,
+and no Supported Agent names the proxy. Do Step 2.</td>
+</tr>
+<tr>
+<td><code>Failed</code></td>
+<td>The navigation system refused the proxy. The status text gives UE's
+reason.</td>
+</tr>
+<tr>
+<td><code>Waiting</code> / <code>Requested</code></td>
+<td>Not settled yet (the navigation system registers on a later tick),
+or auto-registration is off.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>A warning appears once if the bridge ends in <code>NotClaimed</code>
+or <code>Failed</code>. It names the setting to change.</p>
+<h2 id="cost-areas-with-the-stock-nodes">Cost areas with the stock
+nodes</h2>
+<p>A <strong>Filter Class</strong> on Move To (a
+<code>NavigationQueryFilter</code>) works as it does with Recast. Its
+area costs and exclusions are applied by the LCM Nav3D planner, the same
+as on the LCM FlyTo nodes. <a
+href="nav-links-and-areas.html">Tutorial 10</a> covers cost-area
+volumes and filters.</p>
+<h2 id="limits">Limits</h2>
 <ul>
-<li><code>LCM_BTTask_MoveToAndFace</code> - travel to a point and turn to
-face something on arrival, as one task.</li>
-<li><code>LCM_BTTask_Hover</code> - hold position while facing a target,
-for a fixed time or indefinitely.</li>
+<li>The stock nodes follow the route with the pawn's own movement
+component. For 6-DOF flight dynamics (bank, thrust, archetypes), use the
+<strong>LCM Fly To</strong> BT or StateTree task, or the <strong>LCM Fly
+To Location</strong> Blueprint node.</li>
+<li><code>Move To</code> path following in UE is ground-oriented: it
+projects points and treats acceptance in 2D unless the movement
+component flies. Give the pawn a flying movement mode, or use LCM Fly
+To.</li>
 </ul>
-
-
-  <div class="pager"><a href="bt-is-at-location.html">&larr; Is At Location</a><a href="bt-turn-in-place.html">Turn In Place &rarr;</a></div>
+  <div class="pager"><a href="fly-to-location.html">&larr; Fly To Location node</a><a href="bt-wait.html">Wait &rarr;</a></div>
   <footer>
    <p><strong>LCM Nav3D</strong> True Volumetric 3D Navigation for Unreal Engine &nbsp;|&nbsp;
     <a href="https://www.fab.com/listings/92f05e42-d7be-4de3-abe8-7b0a3e70ba73">Fab</a> &nbsp;|&nbsp;
